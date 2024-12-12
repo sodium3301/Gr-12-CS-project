@@ -1,1 +1,2 @@
-print("hello")
+import pygame, sys
+from settings import *
