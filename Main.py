@@ -1,6 +1,7 @@
 import pygame, sys
 from settings import *
 from stuff import Stuff
+from Character import Player
 
 class Game:
     def __init__(self):
@@ -20,6 +21,8 @@ class Game:
             self.stuff.run()
             pygame.display.update()
             self.clock.tick(FPS)
+
+    user = Player((50, 50))
 
 if __name__ == '__main__':
     game = Game()
