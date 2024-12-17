@@ -1,11 +1,13 @@
 import pygame, sys
 from settings import *
+from stuff import Stuff
 
 class Game:
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode((WIDTH, HEIGTH))
         self.clock = pygame.time.Clock()
+        self.stuff = Stuff()
     
     def run(self):
         while True:
@@ -15,6 +17,7 @@ class Game:
                     sys.exit()
 
             self.screen.fill('black')
+            self.stuff.run()
             pygame.display.update()
             self.clock.tick(FPS)
 
