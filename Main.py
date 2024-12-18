@@ -1,7 +1,7 @@
 import pygame, sys
 from settings import *
 from stuff import Stuff
-from Character import Player
+from character import Player
 
 class Main:
     def __init__(self):
