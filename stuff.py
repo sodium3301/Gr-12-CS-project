@@ -1,7 +1,7 @@
 import pygame
 from settings import *
 from tiles import Tile
-from Character import Player
+from character import Player
 
 class Stuff:
     def __init__(self):
