@@ -27,7 +27,7 @@ if __name__ == '__main__':
     game = Game()
     game.run()
 
-user = Player((40,40))
+
 
 
 

@@ -14,3 +14,4 @@ class Stuff:
         
     def run(self):
         self.visible_sprites.draw(self.display_surface)
+        
