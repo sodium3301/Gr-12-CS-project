@@ -3,7 +3,7 @@ from settings import *
 from stuff import Stuff
 from Character import Player
 
-class Game:
+class Main:
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode((WIDTH, HEIGTH))
@@ -24,8 +24,8 @@ class Game:
 
 
 if __name__ == '__main__':
-    game = Game()
-    game.run()
+    main = Main()
+    main.run()
 
 
 

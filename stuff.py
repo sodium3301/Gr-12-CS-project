@@ -10,7 +10,9 @@ class Stuff:
         self.create_map()
 
     def create_map(self):
-        Tile((250,250), [self.visible_sprites])
+        # Tile((250,250), [self.visible_sprites])
+        pass
+        #make the map here
         
     def run(self):
         self.visible_sprites.draw(self.display_surface)
