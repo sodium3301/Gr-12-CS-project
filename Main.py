@@ -1,7 +1,7 @@
 import pygame, sys
 from settings import *
 from stuff import Stuff
-from character import Player
+from Character import Player
 
 class Main:
     def __init__(self):
@@ -26,9 +26,4 @@ class Main:
 if __name__ == '__main__':
     main = Main()
     main.run()
-
-
-
-
-
 

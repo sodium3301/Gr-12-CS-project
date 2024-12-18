@@ -1,7 +1,7 @@
 import pygame
 from settings import *
 from tiles import Tile
-from character import Player
+from Character import Player
 
 class Stuff:
     def __init__(self):
@@ -10,8 +10,8 @@ class Stuff:
         self.create_map()
 
     def create_map(self):
-        # Tile((250,250), [self.visible_sprites])
-        pass
+        Tile((250,250), [self.visible_sprites])
+        # pass
         #make the map here
         
     def run(self):
