@@ -22,11 +22,13 @@ class Game:
             pygame.display.update()
             self.clock.tick(FPS)
 
-    user = Player((50, 50))
 
 if __name__ == '__main__':
     game = Game()
     game.run()
+
+user = Player((40,40))
+
 
 
 
