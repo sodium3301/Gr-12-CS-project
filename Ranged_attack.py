@@ -1,17 +1,15 @@
 import pygame
 
-class Magic(pygame.sprite.Sprite):
-    
-
+class Ranged(pygame.sprite.Sprite):
     def __init__(self, pos, group):
-        self.dmg = 15.0
-        self.scaling = 1.0
+        self.dmg = 11.0
+        self.scaling = 1
         super().__init__(group)
 
         #self.image = pygame.image.load('graphics/rock.png').convert_alpha()
         #self.rect = self.image.get_rect(topleft = pos)
         
-    def add_magic_scaling(self, factor):
+    def add_ranged_scaling(self, factor):
         self.scaling += factor
         return self.scaling
     
@@ -28,16 +26,16 @@ class Magic(pygame.sprite.Sprite):
 
     #def update():    
 
-projectiles = pygame.sprite.Group()
-bolt = Magic((0,0), projectiles)
-fire = Magic((0,0), projectiles)
-bolt.add_magic_scaling(0.5)
-fire.add_magic_scaling(1.2)
+# projectiles = pygame.sprite.Group()
+# arrow = Ranged((0,0), projectiles)
+# bullet = Ranged((0,0), projectiles)
+# arrow.add_ranged_scaling(0.5)
+# bullet.add_ranged_scaling(1.2)
 
-print(projectiles)
+# print(projectiles)
     
-print(fire.get_total_dmg(), bolt.collision())
-fire.add_magic_scaling(0.5)
-print(fire.get_total_dmg(), bolt.get_total_dmg())
-print(projectiles)
+# print(arrow.get_total_dmg(), bullet.collision())
+# arrow.add_ranged_scaling(0.5)
+# print(bullet.get_total_dmg(), arrow.get_total_dmg())
+# print(projectiles)
     
