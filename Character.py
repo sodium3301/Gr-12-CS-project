@@ -4,9 +4,11 @@ from settings import *
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos, groups, obstacle_spirtes):
         super().__init__(groups)
-        self.image = pygame.image.load('graphics/rock.png').convert_alpha()
+        self.image = pygame.image.load('graphics/player.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = pos)
+        self.speed = 5
         self.direction = pygame.math.Vector2()
+      
 
         self.obstacle_sprites = obstacle_spirtes
     
@@ -18,14 +20,14 @@ class Player(pygame.sprite.Sprite):
         elif keys[pygame.K_DOWN]:
             self.direction.y = 1
         else:
-            self.direction = 0
+            self.direction.y = 0
         
         if keys[pygame.K_LEFT]:
-            self.direction.y = -1
+            self.direction.x = -1
         elif keys[pygame.K_RIGHT]:
-            self.direction.y = 1
+            self.direction.x = 1
         else:
-            self.direction = 0
+            self.direction.x = 0
 
     def move(self, speed):
         if self.direction.magnitude() != 0:
@@ -44,14 +46,14 @@ class Player(pygame.sprite.Sprite):
                         self.rect.right = sprite.rect.left
                     if self.direction.x < 0:
                         self.rect.left = sprite.rect.right
+
         if direction == 'vertical':
-            if direction == 'horizontal':
-                for sprite in self.obstacle_sprites:
-                    if sprite.rect.colliderect(self.rect):
-                        if self.direction.x > 0:
-                            self.rect.bottom = sprite.rect.top
-                        if self.direction.x < 0:
-                            self.rect.top = sprite.rect.bottom
+            for sprite in self.obstacle_sprites:
+                if sprite.rect.colliderect(self.rect):
+                    if self.direction.y > 0:
+                        self.rect.bottom = sprite.rect.top
+                    if self.direction.y < 0:
+                        self.rect.top = sprite.rect.bottom
     
     def update(self):
         self.input()
