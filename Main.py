@@ -6,7 +6,7 @@ from Character import Player
 class Main:
     def __init__(self):
         pygame.init()
-        self.screen = pygame.display.set_mode((WIDTH, HEIGTH))
+        self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         self.clock = pygame.time.Clock()
         self.stuff = Stuff()
     
@@ -21,7 +21,6 @@ class Main:
             self.stuff.run()
             pygame.display.update()
             self.clock.tick(FPS)
-
 
 if __name__ == '__main__':
     main = Main()
