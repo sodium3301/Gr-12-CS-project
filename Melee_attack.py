@@ -24,18 +24,5 @@ class Melee(pygame.sprite.Sprite):
 
     #def draw():         
 
-    #def update():    
-
-# projectiles = pygame.sprite.Group()
-# bolt = Melee((0,0), projectiles)
-# fire = Melee((0,0), projectiles)
-# bolt.add_magic_scaling(0.5)
-# fire.add_magic_scaling(1.2)
-
-# print(projectiles)
-    
-# print(fire.get_total_dmg(), bolt.collision())
-# fire.add_magic_scaling(0.5)
-# print(fire.get_total_dmg(), bolt.get_total_dmg())
-# print(projectiles)
+    #def update():
     

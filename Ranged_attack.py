@@ -26,16 +26,4 @@ class Ranged(pygame.sprite.Sprite):
 
     #def update():    
 
-# projectiles = pygame.sprite.Group()
-# arrow = Ranged((0,0), projectiles)
-# bullet = Ranged((0,0), projectiles)
-# arrow.add_ranged_scaling(0.5)
-# bullet.add_ranged_scaling(1.2)
-
-# print(projectiles)
-    
-# print(arrow.get_total_dmg(), bullet.collision())
-# arrow.add_ranged_scaling(0.5)
-# print(bullet.get_total_dmg(), arrow.get_total_dmg())
-# print(projectiles)
     

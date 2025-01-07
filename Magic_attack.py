@@ -1,15 +1,20 @@
 import pygame
+from Character import Player
+from settings import *
 
 class Magic(pygame.sprite.Sprite):
     
 
-    def __init__(self, pos, group):
+    def __init__(self, group):
         self.dmg = 15.0
         self.scaling = 1.0
+        self.direction = Player.get_direction()
+        self.pos = (Player.rect.x, Player.rect.y)
+        self.speed = 1
         super().__init__(group)
 
-        #self.image = pygame.image.load('graphics/rock.png').convert_alpha()
-        #self.rect = self.image.get_rect(topleft = pos)
+        self.image = pygame.image.load('graphics/rock.png').convert_alpha()
+        self.rect = self.image.get_rect(topleft = self.pos)
         
     def add_magic_scaling(self, factor):
         self.scaling += factor
@@ -23,14 +28,28 @@ class Magic(pygame.sprite.Sprite):
         self.total_dmg = self.dmg * self.scaling
         self.kill()
         return self.total_dmg
+    
+    def move(self, speed):
+        if self.direction == (1,0):
+            self.rect.x += speed
+        elif self.direction == (-1,0):
+            self.rect.x -= speed
+        elif self.direction == (0,1):
+            self.rect.y += speed
+        elif self.direction == (0,-1):
+            self.rect.y -= speed
+
+        if self.x > WIDTH or self.y > HEIGTH or self.x < 0 or self.y < 0:
+            self.kill()
+        
 
     #def draw():
 
     #def update():    
 
 projectiles = pygame.sprite.Group()
-bolt = Magic((0,0), projectiles)
-fire = Magic((0,0), projectiles)
+bolt = Magic(projectiles)
+fire = Magic(projectiles)
 bolt.add_magic_scaling(0.5)
 fire.add_magic_scaling(1.2)
 
