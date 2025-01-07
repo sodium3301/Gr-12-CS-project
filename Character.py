@@ -14,6 +14,8 @@ class Player(pygame.sprite.Sprite):
         self.direction = pygame.math.Vector2()
         self.import_player_assets()
         self.status = 'down'
+        self.frame_index = 0
+        self.animation_speed = 0.15
 
         self.obstacle_sprites = obstacle_spirtes
     
@@ -61,6 +63,9 @@ class Player(pygame.sprite.Sprite):
         if self.direction.magnitude() != 0:
             self.direction = self.direction.normalize()
         
+        if self.attacking:
+            self.direction /= 1.5
+
         self.rect.x += self.direction.x * speed
         self.collision('horizontal')
         self.rect.y += self.direction.y * speed
@@ -89,15 +94,37 @@ class Player(pygame.sprite.Sprite):
                     if self.direction.y < 0:
                         self.rect.top = sprite.rect.bottom
     
+    def animate(self):
+        animation = self.animations[self.status]
+
+        self.frame_index += self.animation_speed
+        if self.frame_index >= len(animation):
+            self.frame_index = 0
+        
+        self.image = animation[int(self.frame_index)]
+        self.rect = self.image.get_rect(center = self.hitbox.center)
+
     def get_direction(self):
         return self.direction
 
     def get_status(self):
         if self.direction.x == 0 and self.direction.y == 0:
-            self.status = self.status + '_idle'
-
+            if not 'idle' in self.status and not 'attack' in self.status:
+                self.status += "_idle"
+        
+        if self.attacking:
+            if not 'attack' in self.status:
+                if 'idle' in self.status:
+                    self.status = self.status.replace('_idle','_attack')
+                else:
+                    self.status += "_attack"
+        else:
+            if 'attack' in self.status:
+                self.status.replace("_attack",'')
+        
     def update(self):
         self.input()
         self.cooldown()
         self.get_status()
+        # self.animate()
         self.move(self.speed)
