@@ -1,33 +1,49 @@
 import pygame
+from os import walk
 from settings import *
 # from support import import_folder
+
+def import_folder(path):
+	surface_list = []
+
+	for _,__,img_files in walk(path):
+		for image in img_files:
+			full_path = path + '/' + image
+			image_surf = pygame.image.load(full_path).convert_alpha()
+			surface_list.append(image_surf)
+
+	return surface_list
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos, groups, obstacle_spirtes):
         super().__init__(groups)
-        self.image = pygame.image.load('graphics/player.png').convert_alpha()
+        self.image = pygame.image.load('graphics/test/player.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = pos)
-        self.speed = 5
-        self.attacking = False
-        self.attack_cool = 400
-        self.attack_time = None
-        self.direction = pygame.math.Vector2()
+        self.hitbox = self.rect.inflate(-10, -26)
+        
         self.import_player_assets()
         self.status = 'down'
         self.frame_index = 0
         self.animation_speed = 0.15
 
+        self.direction = pygame.math.Vector2()
+        self.speed = 5
+        self.attacking = False
+        self.attack_cool = 400
+        self.attack_time = None
+
+
         self.obstacle_sprites = obstacle_spirtes
     
     def import_player_assets(self):
-        character_path = '' #
-        self.animations = {'up':[],'down':[],'left':[],'right':[],
-                           'up_idle':[],'down_idle':[],'left_idle':[],'right_idle':[],
-                           'up_attack':[],'down_attack':[],'left_attack':[],'right_attack':[]}
-        
+        character_path = 'graphics/player/'
+        self.animations = {'up': [],'down': [],'left': [],'right': [],
+			'right_idle':[],'left_idle':[],'up_idle':[],'down_idle':[],
+			'right_attack':[],'left_attack':[],'up_attack':[],'down_attack':[]}
+
         for animation in self.animations.keys():
             full_path = character_path + animation
-            self.animations[animation] = '' # import_folder
+            self.animations[animation] = import_folder(full_path)
 
     def input(self):
         keys = pygame.key.get_pressed()
@@ -126,5 +142,5 @@ class Player(pygame.sprite.Sprite):
         self.input()
         self.cooldown()
         self.get_status()
-        # self.animate()
+        #self.animate()
         self.move(self.speed)
