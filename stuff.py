@@ -2,6 +2,7 @@ import pygame
 from settings import *
 from tiles import Tile
 from Character import Player
+from enemy import Enemy
 
 class Stuff:
     def __init__(self):
@@ -20,6 +21,8 @@ class Stuff:
                     Tile((x,y), [self.visible_sprites,self.obstacles_sprites])
                 if col == 'p':
                     self.player = Player((x,y), [self.visible_sprites], self.obstacles_sprites)
+                if col == 'y':
+                    self.enemy = Enemy('monster',(x,y), [self.visible_sprites], self.obstacles_sprites)
     def run(self):
         self.visible_sprites.custom_draw(self.player)
         self.visible_sprites.update()
