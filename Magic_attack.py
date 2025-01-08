@@ -39,7 +39,7 @@ class Magic(pygame.sprite.Sprite):
         elif self.direction == (0,-1):
             self.rect.y -= speed
 
-        if self.x > WIDTH or self.y > HEIGTH or self.x < 0 or self.y < 0:
+        if self.x > WIDTH or self.y > HEIGHT or self.x < 0 or self.y < 0:
             self.kill()
         
 
