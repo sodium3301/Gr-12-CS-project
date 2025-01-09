@@ -1,34 +1,50 @@
 import pygame
+from os import walk
 from settings import *
 from entities import Entity
 # from support import import_folder
 
+def import_folder(path):
+	surface_list = []
+
+	for _,__,img_files in walk(path):
+		for image in img_files:
+			full_path = path + '/' + image
+			image_surf = pygame.image.load(full_path).convert_alpha()
+			surface_list.append(image_surf)
+
+	return surface_list
+
 class Player(Entity):
     def __init__(self, pos, groups, obstacle_spirtes):
         super().__init__(groups)
-        self.image = pygame.image.load('graphics/player.png').convert_alpha()
+        self.image = pygame.image.load('graphics/test/player.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = pos)
-        self.speed = 5
-        self.attacking = False
-        self.attack_cool = 400
-        self.attack_time = None
-        self.direction = pygame.math.Vector2()
+        self.hitbox = self.rect.inflate(-10, -26)
+        
         self.import_player_assets()
         self.status = 'down'
         self.frame_index = 0
         self.animation_speed = 0.15
 
+        self.direction = pygame.math.Vector2()
+        self.speed = 5
+        self.attacking = False
+        self.attack_cool = 400
+        self.attack_time = None
+
+
         self.obstacle_sprites = obstacle_spirtes
     
     def import_player_assets(self):
-        character_path = '' #
-        self.animations = {'up':[],'down':[],'left':[],'right':[],
-                           'up_idle':[],'down_idle':[],'left_idle':[],'right_idle':[],
-                           'up_attack':[],'down_attack':[],'left_attack':[],'right_attack':[]}
-        
+        character_path = 'graphics/player/'
+        self.animations = {'up': [],'down': [],'left': [],'right': [],
+			'right_idle':[],'left_idle':[],'up_idle':[],'down_idle':[],
+			'right_attack':[],'left_attack':[],'up_attack':[],'down_attack':[]}
+
         for animation in self.animations.keys():
             full_path = character_path + animation
-            self.animations[animation] = '' # import_folder
+            self.animations[animation] = import_folder(full_path)
 
     def input(self):
         keys = pygame.key.get_pressed()
@@ -60,17 +76,17 @@ class Player(Entity):
             self.attack_time = pygame.time.get_ticks()
             print('magic')
 
-    def move(self, speed):
-        if self.direction.magnitude() != 0:
-            self.direction = self.direction.normalize()
+    # # def move(self, speed):
+    #     if self.direction.magnitude() != 0:
+    #         self.direction = self.direction.normalize()
         
-        if self.attacking:
-            self.direction /= 1.5
+    #     if self.attacking:
+    #         self.direction /= 1.5
 
-        self.rect.x += self.direction.x * speed
-        self.collision('horizontal')
-        self.rect.y += self.direction.y * speed
-        self.collision('vertical')
+    #     self.rect.x += self.direction.x * speed
+    #     self.collision('horizontal')
+    #     self.rect.y += self.direction.y * speed
+    #     self.collision('vertical')
 
     def cooldown(self):
         current_time = pygame.time.get_ticks()
@@ -78,22 +94,22 @@ class Player(Entity):
             if current_time - self.attack_time >= self.attack_cool:
                 self.attacking = False
 
-    def collision(self, direction):
-        if direction == 'horizontal':
-            for sprite in self.obstacle_sprites:
-                if sprite.rect.colliderect(self.rect):
-                    if self.direction.x > 0:
-                        self.rect.right = sprite.rect.left
-                    if self.direction.x < 0:
-                        self.rect.left = sprite.rect.right
+    # def collision(self, direction):
+    #     if direction == 'horizontal':
+    #         for sprite in self.obstacle_sprites:
+    #             if sprite.rect.colliderect(self.rect):
+    #                 if self.direction.x > 0:
+    #                     self.rect.right = sprite.rect.left
+    #                 if self.direction.x < 0:
+    #                     self.rect.left = sprite.rect.right
 
-        if direction == 'vertical':
-            for sprite in self.obstacle_sprites:
-                if sprite.rect.colliderect(self.rect):
-                    if self.direction.y > 0:
-                        self.rect.bottom = sprite.rect.top
-                    if self.direction.y < 0:
-                        self.rect.top = sprite.rect.bottom
+    #     if direction == 'vertical':
+    #         for sprite in self.obstacle_sprites:
+    #             if sprite.rect.colliderect(self.rect):
+    #                 if self.direction.y > 0:
+    #                     self.rect.bottom = sprite.rect.top
+    #                 if self.direction.y < 0:
+    #                     self.rect.top = sprite.rect.bottom
     
     def animate(self):
         animation = self.animations[self.status]
