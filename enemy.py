@@ -51,7 +51,7 @@ class Enemy(Entity):
          self.animation = {'idle':[], 'move':[], 'attack':[]}
 
     def status(self, player):
-        distance = get_player_distance_direction(player)[0]
+        distance = self.get_player_distance_direction(player)[0]
 
         if distance <= self.attack_radius:
             self.status = 'attack'
@@ -60,6 +60,17 @@ class Enemy(Entity):
         else:
             self.status = 'idle'
 
+    def action(self, player):
+        if self.status == 'attack':
+            print('attack')
+        elif self.status == 'move' :
+            self.direction = self.get_player_distance_direction(player)[1]
+        else:
+            self.direction = pygame.math.Vector2()
+
     def update(self):
-        self.status()
         self.move(self.speed)
+
+    def enemy_update(self, player):
+        self.status(player)
+        self.action(player)

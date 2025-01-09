@@ -17,12 +17,12 @@ class Stuff:
             for col_index, col in enumerate(row):
                 x = col_index * TILESIZE
                 y = row_index * TILESIZE
-                if col == 'x':
+                if col == 'x': 
                     Tile((x,y), [self.visible_sprites,self.obstacles_sprites])
                 if col == 'p':
                     self.player = Player((x,y), [self.visible_sprites], self.obstacles_sprites)
                 if col == 'y':
-                    self.enemy = Enemy('monster',(x,y), [self.visible_sprites], self.obstacles_sprites)
+                    Enemy('monster',(x,y), [self.visible_sprites], self.obstacles_sprites)
     def run(self):
         self.visible_sprites.custom_draw(self.player)
         self.visible_sprites.update()

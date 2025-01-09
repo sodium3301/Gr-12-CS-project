@@ -1,8 +1,9 @@
 import pygame
 from settings import *
+from entities import Entity
 # from support import import_folder
 
-class Player(pygame.sprite.Sprite):
+class Player(Entity):
     def __init__(self, pos, groups, obstacle_spirtes):
         super().__init__(groups)
         self.image = pygame.image.load('graphics/player.png').convert_alpha()
