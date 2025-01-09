@@ -30,8 +30,8 @@ class Entity(pygame.sprite.Sprite):
             for sprite in self.obstacle_sprites:
                 if sprite.hitbox.colliderect(self.hitbox):
                     if self.direction.y > 0:
-                        self.hitbox.right = sprite.hitbox.top
+                        self.hitbox.bottom = sprite.hitbox.top
                     if self.direction.y  < 0:
-                        self.hitbox.left = sprite.hitbox.bottom
+                        self.hitbox.top = sprite.hitbox.bottom
 
                 
