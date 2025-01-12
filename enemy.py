@@ -1,7 +1,7 @@
 import pygame
 from settings import *
 from entities import Entity
-# from Character import Player
+from Character import Player
 
 class Enemy(Entity):
     def __init__(self, monster_name,pos,groups, obstacle_sprites):
@@ -9,10 +9,12 @@ class Enemy(Entity):
         #general setup
         super().__init__(groups)
         self.sprite_type = 'enemy'
+        self.status = 'idle'
 
         # graphics setup
         self.import_graphics(monster_name)
-        self.image = pygame.Surface((64, 64))
+
+        self.image = pygame.image.load('graphics/test/player.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = pos)
 
         # enemy movment
@@ -36,12 +38,13 @@ class Enemy(Entity):
     def get_player_distance_direction(self, player):
         enemy_vec = pygame.math.Vector2(self.rect.center)
         p_vec = pygame.math.Vector2(player.rect.center)
-        
+        # print(p_vec)
         distance = (p_vec - enemy_vec).magnitude()
         direction = (p_vec-enemy_vec).normalize()
-
-        if distance > 0:
-            direction = (p_vec - enemy_vec).normalize()
+        # print(direction)
+        # print(distance)
+        if distance > 64:
+            direction = (p_vec-enemy_vec).normalize()
         else:
             direction = pygame.math.Vector2()
 
@@ -50,21 +53,28 @@ class Enemy(Entity):
     def import_graphics(self, name):
          self.animation = {'idle':[], 'move':[], 'attack':[]}
 
-    def status(self, player):
+    def get_status(self, player):
         distance = self.get_player_distance_direction(player)[0]
 
         if distance <= self.attack_radius:
             self.status = 'attack'
+            print('attack')
         elif distance <= self.agro_radius:
+            print("moving")
             self.status = 'move'
+            
         else:
             self.status = 'idle'
+       
+           
 
     def action(self, player):
         if self.status == 'attack':
             print('attack')
         elif self.status == 'move' :
             self.direction = self.get_player_distance_direction(player)[1]
+            # self.direction = self.direction
+            
         else:
             self.direction = pygame.math.Vector2()
 
@@ -72,5 +82,7 @@ class Enemy(Entity):
         self.move(self.speed)
 
     def enemy_update(self, player):
-        self.status(player)
+        self.get_status(player)
         self.action(player)
+      
+        # print('hi')
