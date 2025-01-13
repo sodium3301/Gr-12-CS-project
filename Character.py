@@ -114,7 +114,5 @@ class Player(Entity):
         self.input()
         self.cooldown()
         self.get_status()
-        # self.animate()
-        self.move(self.speed)
         self.animate()
->>>>>>> Stashed changes
+        self.move(self.speed)
