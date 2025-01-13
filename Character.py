@@ -20,7 +20,7 @@ class Player(Entity):
         super().__init__(groups)
         self.image = pygame.image.load('graphics/test/player.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = pos)
-        self.hitbox = self.rect.inflate(-10, -26)
+        self.hitbox = self.rect.inflate(-10, -10)
         
         self.import_player_assets()
         self.status = 'down'
@@ -76,40 +76,11 @@ class Player(Entity):
             self.attack_time = pygame.time.get_ticks()
             print('magic')
 
-    # # def move(self, speed):
-    #     if self.direction.magnitude() != 0:
-    #         self.direction = self.direction.normalize()
-        
-    #     if self.attacking:
-    #         self.direction /= 1.5
-
-    #     self.rect.x += self.direction.x * speed
-    #     self.collision('horizontal')
-    #     self.rect.y += self.direction.y * speed
-    #     self.collision('vertical')
-
     def cooldown(self):
         current_time = pygame.time.get_ticks()
         if self.attacking:
             if current_time - self.attack_time >= self.attack_cool:
                 self.attacking = False
-
-    # def collision(self, direction):
-    #     if direction == 'horizontal':
-    #         for sprite in self.obstacle_sprites:
-    #             if sprite.rect.colliderect(self.rect):
-    #                 if self.direction.x > 0:
-    #                     self.rect.right = sprite.rect.left
-    #                 if self.direction.x < 0:
-    #                     self.rect.left = sprite.rect.right
-
-    #     if direction == 'vertical':
-    #         for sprite in self.obstacle_sprites:
-    #             if sprite.rect.colliderect(self.rect):
-    #                 if self.direction.y > 0:
-    #                     self.rect.bottom = sprite.rect.top
-    #                 if self.direction.y < 0:
-    #                     self.rect.top = sprite.rect.bottom
     
     def animate(self):
         animation = self.animations[self.status]
@@ -145,3 +116,5 @@ class Player(Entity):
         self.get_status()
         # self.animate()
         self.move(self.speed)
+        self.animate()
+>>>>>>> Stashed changes
