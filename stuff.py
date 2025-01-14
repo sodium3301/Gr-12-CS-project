@@ -67,7 +67,7 @@ class Stuff:
 	def destroy_attack(self):
 		if self.current_attack:
 			self.current_attack.kill()
-
+			print('a;lskdjf;alskjfd')
 		self.current_attack = None
 
 

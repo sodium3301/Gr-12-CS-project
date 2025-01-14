@@ -31,5 +31,5 @@ monster_data = {
 }
 
 weapon_data = {
-    'sword' : {'cooldown': 100, 'damage': 15}
+    'sword' : {'cooldown': 100, 'damage': 15, 'graphics': '/graphics/weapons/sword/full.png'}
 }
