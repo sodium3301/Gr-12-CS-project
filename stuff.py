@@ -16,12 +16,11 @@ class Stuff:
 		self.obstacles_sprites = pygame.sprite.Group()
 		
 		# attack sprites
-		self.current_attack  =None
+		self.current_attack  = None
 		self.attack_sprites = pygame.sprite.Group()
 		self.attackable_sprites = pygame.sprite.Group()
 
 		# Weapon 
-
 		
 		self.create_map()
 
