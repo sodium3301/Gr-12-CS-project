@@ -35,8 +35,8 @@ class Player(Entity):
         self.obstacle_sprites = obstacle_spirtes
 
         # stats
-        self.stats = {'health':100,'energy':60,'attack':10,'magic':4,'speed':5}
-        self.health = self.stats['health']
+        self.stats = {'heart':6,'energy':60,'attack':10,'magic':4,'speed':5}
+        self.heart = self.stats['heart']
         self.energy = self.stats['energy']
         self.speed = self.stats['speed']
         self.exp = 0
@@ -99,6 +99,9 @@ class Player(Entity):
 
     def get_direction(self):
         return self.direction
+
+    def get_heart(self):
+        return [self.heart, self.stats['heart']]
 
     def get_status(self):
         if self.direction.x == 0 and self.direction.y == 0:

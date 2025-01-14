@@ -18,6 +18,10 @@ class Stuff:
 
 		self.ui = UI()
 
+		self.full_heart = pygame.transform.scale(pygame.image.load('graphics/full_heart.png').convert_alpha(), (30,30))
+		self.half_heart = pygame.transform.scale(pygame.image.load('graphics/half_heart.png').convert_alpha(), (30,30))
+		self.empty_heart = pygame.transform.scale(pygame.image.load('graphics/empty_heart.png').convert_alpha(), (30,30))
+
 	def create_map(self):
 		world_map = [['x' if random() < 0.02 else '' for _ in range(50)] for _ in range(50)]
 		world_map[25][25] = 'p'
@@ -36,15 +40,39 @@ class Stuff:
 
 				if col == 'y':
 					Enemy('monster',(x,y), [self.visible_sprites], self.obstacles_sprites)
-					
+
+	def draw_heart(self):
+		hp = self.player.get_heart()[0]
+		max_hp = self.player.get_heart()[1]
+		x_start = 20
+		y = 10
+		space = 35
+		full = hp // 2
+		half = hp % 2
+		empty = (max_hp // 2) - full - half
+		count = 0
+
+		for i in range(full):
+			x = x_start + count * space
+			self.display_surface.blit(self.full_heart, (x, y))
+			count += 1
+		for i in range(half):
+			x = x_start + count * space
+			self.display_surface.blit(self.half_heart, (x, y))
+			count += 1
+		for i in range(empty):
+			x = x_start + count * space
+			self.display_surface.blit(self.empty_heart, (x, y))
+			count += 1
+
 	def run(self):
 		self.visible_sprites.custom_draw(self.player)
 		self.visible_sprites.update()
 		self.obstacles_sprites.update()
 		self.visible_sprites.enemy_update(self.player)
+		self.draw_heart()
 		self.ui.display(self.player)
-	   
-		
+	
 class YSortCameraGroup(pygame.sprite.Group):
 	def __init__(self):
 		super().__init__()
