@@ -5,6 +5,7 @@ from Character import Player
 from enemy import Enemy
 from ui import UI
 from random import random
+from weapon import Weapon
 
 class Stuff:
 	def __init__(self):
@@ -13,6 +14,14 @@ class Stuff:
 		# sprite group setup
 		self.visible_sprites = YSortCameraGroup()
 		self.obstacles_sprites = pygame.sprite.Group()
+		
+		# attack sprites
+		self.current_attack  =None
+		self.attack_sprites = pygame.sprite.Group()
+		self.attackable_sprites = pygame.sprite.Group()
+
+		# Weapon 
+
 		
 		self.create_map()
 
@@ -23,7 +32,7 @@ class Stuff:
 		self.empty_heart = pygame.transform.scale(pygame.image.load('graphics/empty_heart.png').convert_alpha(), (30,30))
 
 	def create_map(self):
-		world_map = [['x' if random() < 0.02 else '' for _ in range(100)] for _ in range(100)]
+		world_map = [['x' if random() < 0.02 else '' for _ in range(300)] for _ in range(300)]
 		world_map[25][25] = 'p'
 		world_map[20][20] = 'y'
 
@@ -36,10 +45,31 @@ class Stuff:
 					Tile((x,y), [self.visible_sprites,self.obstacles_sprites])
 					pass
 				if col == 'p':
-					self.player = Player((x,y), [self.visible_sprites], self.obstacles_sprites)
+					# self.player = Player((x,y), [self.visible_sprites], self.obstacles_sprites, self.create_attack)
+					pass
 
 				if col == 'y':
-					Enemy('monster',(x,y), [self.visible_sprites], self.obstacles_sprites)
+					Enemy(
+						'monster',
+		   				(x,y),
+						[self.visible_sprites, self.attackable_sprites], 
+						self.obstacles_sprites)
+		self.player = Player((2000,1430), 
+					   [self.visible_sprites], 
+					   self.obstacles_sprites, 
+					   self.create_attack,
+					   self.destroy_attack
+					   )
+
+	def create_attack(self):
+		self.current_attack = Weapon(self.player, [self.visible_sprites, self.attack_sprites])
+
+	def destroy_attack(self):
+		if self.current_attack:
+			self.current_attack.kill()
+
+		self.current_attack = None
+
 
 	def draw_heart(self):
 		hp = self.player.get_heart()[0]
