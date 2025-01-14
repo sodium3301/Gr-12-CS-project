@@ -33,3 +33,7 @@ weapon_data = {
 monster_data = {
     'monster': {'health':100, 'exp':100, 'dmg':10, 'attack_type': 'melee', 'speed': 3, 'knockback':3, 'attack_radius': 80, 'agro_radius': 400}
 }
+
+weapon_data = {
+    'sword' : {'cooldown': 100, 'damage': 15, 'graphics': '/graphics/weapons/sword/full.png'}
+}
