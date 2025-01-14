@@ -19,7 +19,7 @@ class Stuff:
 		self.ui = UI()
 
 	def create_map(self):
-		world_map = [['x' if random() < 0.02 else '' for _ in range(50)] for _ in range(50)]
+		world_map = [['x' if random() < 0.02 else '' for _ in range(100)] for _ in range(100)]
 		world_map[25][25] = 'p'
 		world_map[20][20] = 'y'
 
