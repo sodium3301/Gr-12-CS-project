@@ -3,18 +3,28 @@ from settings import *
 from tiles import Tile
 from Character import Player
 from enemy import Enemy
+from ui import UI
+from random import random
 
 class Stuff:
 	def __init__(self):
 		self.display_surface = pygame.display.get_surface()
+
+		# sprite group setup
 		self.visible_sprites = YSortCameraGroup()
 		self.obstacles_sprites = pygame.sprite.Group()
 		
 		self.create_map()
 
+		self.ui = UI()
+
 	def create_map(self):
-		# Player((250,250), [self.visible_sprites])
-		for row_index, row in enumerate(worldMap):
+		world_map = [['x' if random() < 0.02 else '' for _ in range(50)] for _ in range(50)]
+		world_map[25][25] = 'p'
+		world_map[20][20] = 'y'
+
+
+		for row_index, row in enumerate(world_map):
 			for col_index, col in enumerate(row):
 				x = col_index * TILESIZE
 				y = row_index * TILESIZE
@@ -32,6 +42,7 @@ class Stuff:
 		self.visible_sprites.update()
 		self.obstacles_sprites.update()
 		self.visible_sprites.enemy_update(self.player)
+		self.ui.display(self.player)
 	   
 		
 class YSortCameraGroup(pygame.sprite.Group):

@@ -27,14 +27,19 @@ class Player(Entity):
         self.frame_index = 0
         self.animation_speed = 0.15
 
+        # movement
         self.direction = pygame.math.Vector2()
-        self.speed = 5
         self.attacking = False
         self.attack_cool = 400
         self.attack_time = None
-
-
         self.obstacle_sprites = obstacle_spirtes
+
+        # stats
+        self.stats = {'health':100,'energy':60,'attack':10,'magic':4,'speed':5}
+        self.health = self.stats['health']
+        self.energy = self.stats['energy']
+        self.speed = self.stats['speed']
+        self.exp = 0
     
     def import_player_assets(self):
         character_path = 'graphics/player/'
