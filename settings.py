@@ -3,6 +3,10 @@ HEIGHT = 768
 FPS = 60
 TILESIZE = 64
 
+weapon_data = {
+	'sword': {'cooldown': 100, 'damage': 15,'graphic':'../graphics/melee sprites/up.png'},
+}
+
 # world_map =  [
 #     ['x', '', '', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'],
 #     ['x', '', '', '', '', '', '', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'],

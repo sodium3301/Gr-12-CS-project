@@ -34,13 +34,11 @@ class Player(Entity):
         self.attack_time = None
         self.obstacle_sprites = obstacle_spirtes
 
-        # init weapon/attack
+        # weapon
         self.create_attack = create_attack
         self.destroy_attack = destroy_attack
-
         self.weapon_index = 0
         self.weapon = list(weapon_data.keys())[self.weapon_index]
-        print(self.weapon)
 
         # stats
         self.stats = {'heart':6,'energy':60,'attack':10,'magic':4,'speed':5}
@@ -83,8 +81,8 @@ class Player(Entity):
         if keys[pygame.K_SPACE] and not self.attacking:
             self.attacking = True
             self.attack_time = pygame.time.get_ticks()
+            self.destroy_attack()
             self.create_attack()
-
         if keys[pygame.K_LCTRL] and not self.attacking:
             self.attacking = True            
             self.attack_time = pygame.time.get_ticks()
@@ -96,7 +94,6 @@ class Player(Entity):
             if current_time - self.attack_time >= self.attack_cool:
                 self.attacking = False
                 self.destroy_attack()
-                print('attack destroyed')
     
     def animate(self):
         animation = self.animations[self.status]

@@ -5,7 +5,6 @@ from Character import Player
 from enemy import Enemy
 from ui import UI
 from random import random
-from weapon import Weapon
 
 class Stuff:
 	def __init__(self):
@@ -44,8 +43,7 @@ class Stuff:
 					Tile((x,y), [self.visible_sprites,self.obstacles_sprites])
 					pass
 				if col == 'p':
-					# self.player = Player((x,y), [self.visible_sprites], self.obstacles_sprites, self.create_attack)
-					pass
+					self.player = Player((x,y), [self.visible_sprites], self.obstacles_sprites)
 
 				if col == 'y':
 					Enemy(
@@ -69,6 +67,14 @@ class Stuff:
 			print('a;lskdjf;alskjfd')
 		self.current_attack = None
 
+
+	def create_attack(self):
+		self.current_attack = Weapon(self.player, [self.visible_sprites])
+		
+	def destroy_attack(self):
+		if self.current_attack:
+			self.current_attack.kill()
+		self.current_attack = None
 
 	def draw_heart(self):
 		hp = self.player.get_heart()[0]
