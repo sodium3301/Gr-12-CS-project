@@ -16,7 +16,7 @@ def import_folder(path):
 	return surface_list
 
 class Player(Entity):
-    def __init__(self, pos, groups, obstacle_spirtes):
+    def __init__(self, pos, groups, obstacle_spirtes, create_attack, destroy_attack):
         super().__init__(groups)
         self.image = pygame.image.load('graphics/test/player.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = pos)
@@ -33,6 +33,12 @@ class Player(Entity):
         self.attack_cool = 400
         self.attack_time = None
         self.obstacle_sprites = obstacle_spirtes
+
+        # weapon
+        self.create_attack = create_attack
+        self.destroy_attack = destroy_attack
+        self.weapon_index = 0
+        self.weapon = list(weapon_data.keys())[self.weapon_index]
 
         # stats
         self.stats = {'heart':6,'energy':60,'attack':10,'magic':4,'speed':5}
@@ -75,7 +81,8 @@ class Player(Entity):
         if keys[pygame.K_SPACE] and not self.attacking:
             self.attacking = True
             self.attack_time = pygame.time.get_ticks()
-            print('attack')
+            self.destroy_attack()
+            self.create_attack()
         if keys[pygame.K_LCTRL] and not self.attacking:
             self.attacking = True            
             self.attack_time = pygame.time.get_ticks()
@@ -86,6 +93,7 @@ class Player(Entity):
         if self.attacking:
             if current_time - self.attack_time >= self.attack_cool:
                 self.attacking = False
+                self.destroy_attack()
     
     def animate(self):
         animation = self.animations[self.status]
