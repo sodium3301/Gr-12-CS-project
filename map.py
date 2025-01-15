@@ -3,18 +3,19 @@ import random
 from settings import *
 
 class Tile(pygame.sprite.Sprite):
-    def __init__(self, pos, groups, ):
+    def __init__(self, pos, groups):
         super().__init__(groups)
         self.image = pygame.image.load('graphics/tile.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = pos)
         self.hitbox = self.rect.inflate(-10, -10)
 
 class Map:
-    def __init__(self, stuff, player):
-
+    def __init__(self, stuff, player, visible_sprites, obstacles_sprites):
         self.plot = [['' for _ in range(DIMENSION)] for _ in range(DIMENSION)]
         self.stuff = stuff
         self.player = player
+        self.visible_sprites = visible_sprites
+        self.obstacles_sprites = obstacles_sprites
 
         self.create_map()
         
@@ -29,37 +30,54 @@ class Map:
             return 'x'
         return ''
 
-    def draw_map(self, visible_sprites, obstacles_sprites):
+    def draw_map(self):
         for row_index, row in enumerate(self.plot):
              for col_index, col in enumerate(row):
                 x = col_index * TILESIZE
                 y = row_index * TILESIZE
                 if col == 'x': 
-                    Tile((x,y), [visible_sprites, obstacles_sprites])
+                    Tile((x,y), [self.visible_sprites, self.obstacles_sprites])
+
+    def clear_map(self):
+        """
+        Clear all tiles from the map by emptying sprite groups.
+        """
+        for sprite in self.visible_sprites:
+            if isinstance(sprite, Tile):
+                sprite.kill()  # Removes the tile from all sprite groups
+
+        for sprite in self.obstacles_sprites:
+            if isinstance(sprite, Tile):
+                sprite.kill()
 
     def update(self):
         # Player is going up
-        if self.player.get_position().y <= MIDPOINT * TILESIZE:
+        self.clear_map()
+        if self.player.get_y_pos() <= MIDPOINT * TILESIZE:
             self.plot.pop()
             self.plot.insert(0, [self.create_tile() for _ in range(DIMENSION)])
-            # print('top')
+            self.player.offset_position('up')
+            print('top')
         # down
-        if self.player.get_position().y >= (MIDPOINT + 1) * TILESIZE:
+        if self.player.get_y_pos() >= (MIDPOINT + 1) * TILESIZE:
             self.plot.pop(0)
             self.plot.append([self.create_tile() for _ in range(DIMENSION)])
-            # print('bottom')
+            self.player.offset_position('down')
+            print('bottom')
         # left
-        if self.player.get_position().x <= MIDPOINT * TILESIZE:
+        if self.player.get_x_pos() <= MIDPOINT * TILESIZE:
             for row in self.plot:
                 row.pop()
                 row.insert(0, self.create_tile())
-            # print('left')
+            self.player.offset_position('left')
+            print('left')
         # right
-        if self.player.get_position().x >= (MIDPOINT + 1) * TILESIZE:
+        if self.player.get_x_pos() >= (MIDPOINT + 1) * TILESIZE:
             for row in self.plot:
                 row.pop(0)
                 row.append(self.create_tile())
-            # print('right')
-    
+            self.player.offset_position('right')
+            print('right')
+
     def get_plot(self):
         return self.plot

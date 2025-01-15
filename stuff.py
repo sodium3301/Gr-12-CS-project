@@ -28,7 +28,7 @@ class Stuff:
 		self.last_spawn_time = pygame.time.get_ticks()
 		self.enemy_spawn_delay = 3000
 
-		self.player = Player((2000, 1400),[self.visible_sprites], 
+		self.player = Player([self.visible_sprites], 
 					   self.obstacles_sprites, 
 					   self.create_attack,
 					   self.destroy_attack,
@@ -37,20 +37,16 @@ class Stuff:
 		
 		self.create_map()
 
-		self.ui = UI()
+		self.ui = UI(self.player)
 
 		# particles
 		self.animation_player = AnimationPlayer()
 
-		self.full_heart = pygame.transform.scale(pygame.image.load('graphics/full_heart.png').convert_alpha(), (30,30))
-		self.half_heart = pygame.transform.scale(pygame.image.load('graphics/half_heart.png').convert_alpha(), (30,30))
-		self.empty_heart = pygame.transform.scale(pygame.image.load('graphics/empty_heart.png').convert_alpha(), (30,30))
-
 	def create_map(self):
-		self.map = Map(self, self.player)
+		self.map = Map(self, self.player, self.visible_sprites, self.obstacles_sprites)
 		self.plot = self.map.get_plot()
 
-		self.map.draw_map(self.visible_sprites, self.obstacles_sprites)
+		self.map.draw_map()
 
 	def clear_map(self):
 		self.visible_sprites.empty()
@@ -150,10 +146,10 @@ class Stuff:
 	def run(self):
 		current_time = pygame.time.get_ticks()
 		num_enemies = random.randint(3, 5)
-		if current_time - self.last_spawn_time >= self.enemy_spawn_delay:
-			for i in range(random.randint(3, 5)):
-				self.spawn_enemy()
-			self.last_spawn_time = current_time 
+		# if current_time - self.last_spawn_time >= self.enemy_spawn_delay:
+		# 	for i in range(random.randint(3, 5)):
+		# 		self.spawn_enemy()
+		# 	self.last_spawn_time = current_time 
 
 		self.visible_sprites.custom_draw(self.player)
 		self.visible_sprites.update()
@@ -161,7 +157,6 @@ class Stuff:
 		self.visible_sprites.enemy_update(self.player)
 		self.player_attack()
 
-		self.draw_heart()
-		self.ui.display(self.player)
+		self.ui.draw_heart()
 		self.map.update()
-	
+		self.map.draw_map()
