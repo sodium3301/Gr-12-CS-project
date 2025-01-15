@@ -46,14 +46,28 @@ class Stuff:
 
 		self.map.draw_map()
 
-	def clear_map(self):
+	def reset(self):
+		# Clear all existing sprites and states
 		self.visible_sprites.empty()
 		self.obstacles_sprites.empty()
 		self.attack_sprites.empty()
 		self.attackable_sprites.empty()
-		self.player = None
 		self.current_attack = None
-		self.world_map = None
+
+		# Reinitialize the player
+		self.player = Player(
+			[self.visible_sprites],  # Add player to visible sprites group
+			self.obstacles_sprites,  # Pass obstacle sprites group
+			self.create_attack,      # Attack creation callback
+			self.destroy_attack      # Attack destruction callback
+		)
+
+		# Recreate the map or level
+		self.create_map()
+
+		# Reset other game states if needed
+		self.last_spawn_time = pygame.time.get_ticks()
+		self.ui = UI(self.player)  # Update the UI with the new player
 
 	def create_attack(self):
 		self.current_attack = Weapon(self.player, [self.visible_sprites, self.attack_sprites])

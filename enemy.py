@@ -2,7 +2,7 @@ import pygame
 import random
 from settings import *
 from entity import Entity
-from player import Player
+from Character import Player
 
 class Enemy(Entity):
     def __init__(self, monster_name,pos,groups, obstacle_sprites, damage_player):

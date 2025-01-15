@@ -1,7 +1,7 @@
 import pygame, sys
 from settings import *
 from stuff import Stuff
-from player import Player
+from Character import Player
 pygame.init()
 class Main:
     def __init__(self):
@@ -56,12 +56,12 @@ class Main:
                     sys.exit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_r:
-                        self.stuff.clear_map()
+                        self.stuff.reset()
                         waiting = False
                         self.game_active = True
                         self.stuff.create_map()
                     elif event.key == pygame.K_ESCAPE:
-                        self.stuff.clear_map()
+                        self.stuff.reset()
                         waiting = False
                         self.start_screen()
 

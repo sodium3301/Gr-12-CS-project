@@ -34,17 +34,3 @@ class Entity(pygame.sprite.Sprite):
                         self.hitbox.bottom = sprite.hitbox.top
                     if self.direction.y  < 0:
                         self.hitbox.top = sprite.hitbox.bottom
-
-    def offset(self, direction):
-        if direction == 'up':
-            self.hitbox.y += TILESIZE
-            self.rect.center = self.hitbox.center
-        elif direction == 'down':
-            self.hitbox.y -= TILESIZE
-            self.rect.center = self.hitbox.center
-        if direction == 'left':
-            self.hitbox.x += TILESIZE
-            self.rect.center = self.hitbox.center
-        elif direction == 'right':
-            self.hitbox.x -= TILESIZE
-            self.rect.center = self.hitbox.center
