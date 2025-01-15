@@ -1,7 +1,7 @@
 import pygame
 
 from settings import *
-from player import Player
+from Character import Player
 from enemy import Enemy
 from ui import *
 import random
