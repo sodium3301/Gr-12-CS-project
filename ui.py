@@ -2,13 +2,39 @@ import pygame
 from settings import *
 
 class UI:
-    def __init__(self):
-        self.display_surf = pygame.display.get_surface()
+	def __init__(self, player):
+		self.display_surface = pygame.display.get_surface()
+		self.player = player
+		self.full_heart = pygame.transform.scale(pygame.image.load('graphics/full_heart.png').convert_alpha(), (30,30))
+		self.half_heart = pygame.transform.scale(pygame.image.load('graphics/half_heart.png').convert_alpha(), (30,30))
+		self.empty_heart = pygame.transform.scale(pygame.image.load('graphics/empty_heart.png').convert_alpha(), (30,30))
+
         # self.font = 
         # 3:12:08
 
-    def display(self,player):
-        pass
+	def draw_heart(self):
+		hp = self.player.get_heart()[0]
+		max_hp = self.player.get_heart()[1]
+		x_start = 20
+		y = 10
+		space = 35
+		full = hp // 2
+		half = hp % 2
+		empty = (max_hp // 2) - full - half
+		count = 0
+
+		for i in range(full):
+			x = x_start + count * space
+			self.display_surface.blit(self.full_heart, (x, y))
+			count += 1
+		for i in range(half):
+			x = x_start + count * space
+			self.display_surface.blit(self.half_heart, (x, y))
+			count += 1
+		for i in range(empty):
+			x = x_start + count * space
+			self.display_surface.blit(self.empty_heart, (x, y))
+			count += 1
 
 class YSortCameraGroup(pygame.sprite.Group):
 	def __init__(self):

@@ -1,5 +1,5 @@
 import pygame
-from Character import Player
+from player import Player
 from settings import *
 
 class Magic(pygame.sprite.Sprite):

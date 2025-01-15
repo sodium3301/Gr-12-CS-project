@@ -4,18 +4,16 @@ from settings import *
 from entity import Entity
 # from support import import_folder
 
-
-
 class Player(Entity):
     '''
     Player class that controls player's status and activities.
 
     Methods:
     '''
-    def __init__(self, pos, groups, obstacle_spirtes, create_attack, destroy_attack):
+    def __init__(self, groups, obstacle_spirtes, create_attack, destroy_attack):
         super().__init__(groups)
         self.image = pygame.image.load('graphics/test/player.png').convert_alpha()
-        self.rect = self.image.get_rect(topleft = pos)
+        self.rect = self.image.get_rect(topleft = (MIDPOINT * TILESIZE, MIDPOINT * TILESIZE))
         self.hitbox = self.rect.inflate(-10, -10)
         
         self.import_player_assets()
@@ -23,8 +21,7 @@ class Player(Entity):
         self.frame_index = 0
         self.animation_speed = 0.15
 
-        # movement
-        self.direction = pygame.math.Vector2()
+        self.logical_position = [MIDPOINT, MIDPOINT]  
 
         # collision
         self.obstacle_sprites = obstacle_spirtes
@@ -76,8 +73,28 @@ class Player(Entity):
         for animation in self.animations.keys():
             full_path = character_path + animation
             self.animations[animation] = Player.import_folder(full_path)
-    def get_position(self):
-        return(self.direction)
+    
+    def get_x_pos(self):
+        return self.rect.centerx
+    
+    def get_y_pos(self):
+        return self.rect.centery
+    
+    def offset_position(self, direction):
+        if direction == 'up':
+            self.hitbox.y += TILESIZE
+            self.rect.center = self.hitbox.center
+        elif direction == 'down':
+            self.hitbox.y -= TILESIZE
+            self.rect.center = self.hitbox.center
+
+        if direction == 'left':
+            self.hitbox.x += TILESIZE
+            self.rect.center = self.hitbox.center
+            print(self.rect.centerx)
+        elif direction == 'right':
+            self.hitbox.x -= TILESIZE
+            self.rect.center = self.hitbox.center
 
     def input(self):
         '''
