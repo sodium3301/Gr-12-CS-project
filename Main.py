@@ -2,7 +2,7 @@ import pygame, sys
 from settings import *
 from stuff import Stuff
 from Character import Player
-
+pygame.init()
 class Main:
     def __init__(self):
         pygame.init()
@@ -60,6 +60,7 @@ class Main:
                     waiting = False
 
     def run(self):
+        
         if not self.game_active:
             self.start_screen()
             self.stuff.create_map()
@@ -74,7 +75,8 @@ class Main:
                         self.pulsing = not self.pulsing
                     if event.key == pygame.K_k:
                         self.dead = True  # Trigger death screen when 'K' is pressed
-
+            
+            
             if self.dead:
                 self.death_screen()
             elif self.pulsing:

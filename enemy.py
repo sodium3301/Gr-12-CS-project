@@ -1,4 +1,5 @@
 import pygame
+import random
 from settings import *
 from entities import Entity
 from Character import Player
@@ -34,6 +35,20 @@ class Enemy(Entity):
         self.attack_radius = monster_info['attack_radius']
         self.agro_radius = monster_info['agro_radius']
 
+    def get_random_spawn_position(self, min_distance=200, max_distance=500):
+        """Generate a random position around the player at a given distance range."""
+        angle = random.uniform(0, 360)  # Random angle in degrees
+        distance = random.randint(min_distance, max_distance)  # Random distance
+
+        # Convert angle to radians
+        radians = angle * (3.14159 / 180)
+
+        # Compute the random spawn location
+        enemy_x = int(self.player.rect.centerx + distance * pygame.math.Vector2(1, 0).rotate(angle).x)
+        enemy_y = int(self.player.rect.centery + distance * pygame.math.Vector2(1, 0).rotate(angle).y)
+
+        return (enemy_x, enemy_y)
+
 
     def get_player_distance_direction(self, player):
         enemy_vec = pygame.math.Vector2(self.rect.center)
@@ -60,7 +75,6 @@ class Enemy(Entity):
             self.status = 'attack'
             print('attack')
         elif distance <= self.agro_radius:
-            print("moving")
             self.status = 'move'
             
         else:
