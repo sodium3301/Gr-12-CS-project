@@ -39,12 +39,17 @@ class Player(Entity):
         self.weapon = list(weapon_data.keys())[self.weapon_index]
 
         # stats
-        self.stats = {'heart':6,'energy':60,'attack':10,'magic':4,'speed':5}
+        self.stats = {'heart':20,'energy':60,'attack':10,'magic':4,'speed':5}
         self.heart = self.stats['heart']
         self.energy = self.stats['energy']
         self.speed = self.stats['speed']
         self.exp = 0
     
+        self.vulnerable = True
+        self.hurt_time = None
+        self.invulnerability_dur = 30000
+
+
     def import_folder(path):
         '''
         Helper method for import_player_asset(self)
@@ -117,6 +122,11 @@ class Player(Entity):
             if current_time - self.attack_time >= self.attack_cool:
                 self.attacking = False
                 self.destroy_attack()
+
+        if not self.vulnerable:
+            if current_time - self.hurt_time >= self.invulnerability_dur:
+                self.vulnerable = True
+                print(self.vulnerable)
     
     def animate(self):
         '''
@@ -164,7 +174,7 @@ class Player(Entity):
     def get_full_weapon_damage(self):
         base_damage = self.stats['attack']
         weapon_damage = weapon_data[self.weapon]['damage']
-        print(base_damage + weapon_damage)
+        # print(base_damage + weapon_damage)
         return base_damage + weapon_damage
 
     def update(self):

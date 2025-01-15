@@ -42,24 +42,24 @@ class Map:
         if self.player.get_position().y <= MIDPOINT * TILESIZE:
             self.plot.pop()
             self.plot.insert(0, [self.create_tile() for _ in range(DIMENSION)])
-            print('top')
+            # print('top')
         # down
         if self.player.get_position().y >= (MIDPOINT + 1) * TILESIZE:
             self.plot.pop(0)
             self.plot.append([self.create_tile() for _ in range(DIMENSION)])
-            print('bottom')
+            # print('bottom')
         # left
         if self.player.get_position().x <= MIDPOINT * TILESIZE:
             for row in self.plot:
                 row.pop()
                 row.insert(0, self.create_tile())
-            print('left')
+            # print('left')
         # right
         if self.player.get_position().x >= (MIDPOINT + 1) * TILESIZE:
             for row in self.plot:
                 row.pop(0)
                 row.append(self.create_tile())
-            print('right')
+            # print('right')
     
     def get_plot(self):
         return self.plot

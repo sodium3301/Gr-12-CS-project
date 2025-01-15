@@ -5,7 +5,7 @@ from entity import Entity
 from player import Player
 
 class Enemy(Entity):
-    def __init__(self, monster_name,pos,groups, obstacle_sprites):
+    def __init__(self, monster_name,pos,groups, obstacle_sprites, damage_player):
         
         #general setup
         super().__init__(groups)
@@ -38,6 +38,7 @@ class Enemy(Entity):
         self.can_attack = True
         self.attack_time = None
         self.attack_cooldown = 400
+        self.damage_player = damage_player
 
         self.vulnerable = True
         self.hit_time = None
@@ -47,11 +48,8 @@ class Enemy(Entity):
     def get_player_distance_direction(self, player):
         enemy_vec = pygame.math.Vector2(self.rect.center)
         p_vec = pygame.math.Vector2(player.rect.center)
-        # print(p_vec)
         distance = (p_vec - enemy_vec).magnitude()
         direction = (p_vec-enemy_vec).normalize()
-        # print(direction)
-        # print(distance)
         if distance > 0:
             direction = (p_vec-enemy_vec).normalize()
         else:
@@ -67,13 +65,15 @@ class Enemy(Entity):
 
         if distance <= self.attack_radius:
             self.status = 'attack'
-            # print('attack')
+
         elif distance <= self.agro_radius:
             self.status = 'move'
             
         else:
             self.status = 'idle'
-       
+
+
+
     def cooldown(self):
         current_time = pygame.time.get_ticks()
         if not self.can_attack:
@@ -83,19 +83,20 @@ class Enemy(Entity):
         if not self.vulnerable:
             if current_time - self.hit_time >= self.invincibility_dur:
                 self.vulnerable = True
-                print('cooldown over')
+
+
     def get_damage(self, player, attack_type):
         if self.vulnerable:
             self.direction = self.get_player_distance_direction(player)[1]
             if attack_type == 'weapon':
                 self.health -= player.get_full_weapon_damage()
-                print(self.health)
+
                 
             else:
                 pass
             self.hit_time = pygame.time.get_ticks()
             self.vulnerable=False
-            print(self.vulnerable)
+
 
     def check_death(self):
         if self.health <= 0:
@@ -107,12 +108,11 @@ class Enemy(Entity):
 
     def action(self, player):
         if self.status == 'attack':
-            pass
-            
+            self.attack_time = pygame.time.get_ticks()
+            self.damage_player(self.dmg)
+        
         elif self.status == 'move' :
             self.direction = self.get_player_distance_direction(player)[1]
-            # self.direction = self.direction
-            
         else:
             self.direction = pygame.math.Vector2()
 
@@ -128,4 +128,3 @@ class Enemy(Entity):
         self.get_status(player)
         self.action(player)
       
-        # print('hi')

@@ -73,6 +73,12 @@ class Stuff:
 
 		return (enemy_x, enemy_y)
 
+	def damage_player(self, amount):
+		if self.player.vulnerable:
+			self.player.heart -= amount
+			self.player.vulnerable = False
+			self.player.hurt_time = pygame.time.get_ticks()
+
 
 	def spawn_enemy(self):
 		"""
@@ -85,7 +91,8 @@ class Stuff:
 			'monster',
 			enemy_pos,
 			[self.visible_sprites, self.attackable_sprites],
-			self.obstacles_sprites
+			self.obstacles_sprites,
+			self.damage_player
 		)
 	def destroy_attack(self):
 		if self.current_attack:

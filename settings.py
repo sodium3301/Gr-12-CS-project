@@ -10,7 +10,7 @@ weapon_data = {
 }
 
 monster_data = {
-    'monster': {'health':100, 'exp':100, 'dmg':10, 'attack_type': 'melee', 'speed': 2, 'knockback':3, 'attack_radius': 80, 'agro_radius': 560}
+    'monster': {'health':100, 'exp':100, 'dmg':1, 'attack_type': 'melee', 'speed': 2, 'knockback':3, 'attack_radius': 80, 'agro_radius': 560}
 }
 
 weapon_data = {
