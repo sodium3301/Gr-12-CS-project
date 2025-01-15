@@ -42,7 +42,7 @@ class Enemy(Entity):
 
         self.vulnerable = True
         self.hit_time = None
-        self. invincibility_dur = 300
+        self. invincibility_dur = 500
 
 
     def get_player_distance_direction(self, player):

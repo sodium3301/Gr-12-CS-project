@@ -1,5 +1,4 @@
 import pygame
-
 from settings import *
 from Character import Player
 from enemy import Enemy
