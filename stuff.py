@@ -24,6 +24,8 @@ class Stuff:
 
 		# Weapon 
 
+		self.last_spawn_time = pygame.time.get_ticks()
+		self.enemy_spawn_delay = 3000  
 		
 		self.create_map()
 
@@ -34,7 +36,7 @@ class Stuff:
 		self.empty_heart = pygame.transform.scale(pygame.image.load('graphics/empty_heart.png').convert_alpha(), (30,30))
 
 	def create_map(self):
-		world_map = [['x' if random() < 0.02 else '' for _ in range(300)] for _ in range(300)]
+		world_map = [['x' if random.random() < 0.02 else '' for _ in range(300)] for _ in range(300)]
 		world_map[25][25] = 'p'
 		world_map[20][20] = 'y'
 
@@ -74,6 +76,22 @@ class Stuff:
 
 	def create_attack(self):
 		self.current_attack = Weapon(self.player, [self.visible_sprites, self.attack_sprites])
+
+	def get_random_spawn_position(self, min_distance=200, max_distance=500):
+		"""Generate a random position around the player at a given distance range."""
+		angle = random.uniform(0, 360)  # Random angle in degrees
+		distance = random.randint(min_distance, max_distance)  # Random distance
+
+        # Convert angle to radians
+		radians = angle * (3.14159 / 180)
+
+        # Compute the random spawn location
+		enemy_x = int(self.player.rect.centerx + distance * pygame.math.Vector2(1, 0).rotate(angle).x)
+		enemy_y = int(self.player.rect.centery + distance * pygame.math.Vector2(1, 0).rotate(angle).y)
+
+		return (enemy_x, enemy_y)
+
+
 	def spawn_enemy(self):
 		"""
 		Spawns an enemy at a random position around the player.
@@ -92,6 +110,9 @@ class Stuff:
 			self.current_attack.kill()
 		self.current_attack = None
 
+
+	def get_player(self):
+		return self.player
 
 	def draw_heart(self):
 		hp = self.player.get_heart()[0]
