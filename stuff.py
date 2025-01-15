@@ -77,15 +77,15 @@ class Stuff:
 	def create_attack(self):
 		self.current_attack = Weapon(self.player, [self.visible_sprites, self.attack_sprites])
 
-	def get_random_spawn_position(self, min_distance=200, max_distance=500):
+	def get_random_spawn_position(self, min_distance=200, max_distance=800):
 		"""Generate a random position around the player at a given distance range."""
 		angle = random.uniform(0, 360)  # Random angle in degrees
 		distance = random.randint(min_distance, max_distance)  # Random distance
 
-        # Convert angle to radians
+		# Convert angle to radians
 		radians = angle * (3.14159 / 180)
 
-        # Compute the random spawn location
+		# Compute the random spawn location
 		enemy_x = int(self.player.rect.centerx + distance * pygame.math.Vector2(1, 0).rotate(angle).x)
 		enemy_y = int(self.player.rect.centery + distance * pygame.math.Vector2(1, 0).rotate(angle).y)
 
@@ -110,6 +110,15 @@ class Stuff:
 			self.current_attack.kill()
 		self.current_attack = None
 
+	def player_attack(self):
+		if self.attack_sprites:
+			for attack_sprite in self.attack_sprites:
+				collision_sprites = pygame.sprite.spritecollide(attack_sprite, self.attackable_sprites, False)
+				if collision_sprites:
+					for target_sprite in collision_sprites:
+						# target_sprite.kill()
+						if target_sprite.sprite_type == 'enemy':
+							target_sprite.get_damage(self.player, attack_sprite.sprite_type)
 
 	def get_player(self):
 		return self.player
@@ -150,6 +159,8 @@ class Stuff:
 		self.visible_sprites.update()
 		self.obstacles_sprites.update()
 		self.visible_sprites.enemy_update(self.player)
+		self.player_attack()
+
 		self.draw_heart()
 		self.ui.display(self.player)
 	

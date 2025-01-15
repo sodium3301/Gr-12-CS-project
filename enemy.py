@@ -35,19 +35,13 @@ class Enemy(Entity):
         self.attack_radius = monster_info['attack_radius']
         self.agro_radius = monster_info['agro_radius']
 
-    def get_random_spawn_position(self, min_distance=200, max_distance=500):
-        """Generate a random position around the player at a given distance range."""
-        angle = random.uniform(0, 360)  # Random angle in degrees
-        distance = random.randint(min_distance, max_distance)  # Random distance
+        self.can_attack = True
+        self.attack_time = None
+        self.attack_cooldown = 400
 
-        # Convert angle to radians
-        radians = angle * (3.14159 / 180)
-
-        # Compute the random spawn location
-        enemy_x = int(self.player.rect.centerx + distance * pygame.math.Vector2(1, 0).rotate(angle).x)
-        enemy_y = int(self.player.rect.centery + distance * pygame.math.Vector2(1, 0).rotate(angle).y)
-
-        return (enemy_x, enemy_y)
+        self.vulnerable = True
+        self.hit_time = None
+        self. invincibility_dur = 300
 
 
     def get_player_distance_direction(self, player):
@@ -73,18 +67,48 @@ class Enemy(Entity):
 
         if distance <= self.attack_radius:
             self.status = 'attack'
-            print('attack')
+            # print('attack')
         elif distance <= self.agro_radius:
             self.status = 'move'
             
         else:
             self.status = 'idle'
        
-           
+    def cooldown(self):
+        current_time = pygame.time.get_ticks()
+        if not self.can_attack:
+            if current_time - self.attack_time >= self.attack_cooldown:
+                self.can_attack = True
+                
+        if not self.vulnerable:
+            if current_time - self.hit_time >= self.invincibility_dur:
+                self.vulnerable = True
+                print('cooldown over')
+    def get_damage(self, player, attack_type):
+        if self.vulnerable:
+            self.direction = self.get_player_distance_direction(player)[1]
+            if attack_type == 'weapon':
+                self.health -= player.get_full_weapon_damage()
+                print(self.health)
+                
+            else:
+                pass
+            self.hit_time = pygame.time.get_ticks()
+            self.vulnerable=False
+            print(self.vulnerable)
+
+    def check_death(self):
+        if self.health <= 0:
+            self.kill()
+
+    def hit_reaction(self):
+        if not self.vulnerable:
+            self.direction *= -self.knockback
 
     def action(self, player):
         if self.status == 'attack':
-            print('attack')
+            pass
+            
         elif self.status == 'move' :
             self.direction = self.get_player_distance_direction(player)[1]
             # self.direction = self.direction
@@ -93,7 +117,12 @@ class Enemy(Entity):
             self.direction = pygame.math.Vector2()
 
     def update(self):
+        self.hit_reaction()
         self.move(self.speed)
+        self.check_death()
+        self.cooldown()
+
+    
 
     def enemy_update(self, player):
         self.get_status(player)

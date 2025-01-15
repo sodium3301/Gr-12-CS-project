@@ -159,6 +159,12 @@ class Player(Entity):
             if 'attack' in self.status:
                 self.status.replace("_attack",'')
         
+    def get_full_weapon_damage(self):
+        base_damage = self.stats['attack']
+        weapon_damage = weapon_data[self.weapon]['damage']
+        print(base_damage + weapon_damage)
+        return base_damage + weapon_damage
+
     def update(self):
         self.input()
         self.cooldown()
