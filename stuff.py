@@ -27,7 +27,7 @@ class Stuff:
 		self.last_spawn_time = pygame.time.get_ticks()
 		self.enemy_spawn_delay = 3000
 
-		self.player = Player([self.visible_sprites], 
+		self.player = Player((1400, 2000),[self.visible_sprites], 
 					   self.obstacles_sprites, 
 					   self.create_attack,
 					   self.destroy_attack

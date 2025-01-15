@@ -71,6 +71,8 @@ class Player(Entity):
         for animation in self.animations.keys():
             full_path = character_path + animation
             self.animations[animation] = Player.import_folder(full_path)
+    def get_position(self):
+        return(self.direction)
 
     def input(self):
         '''
