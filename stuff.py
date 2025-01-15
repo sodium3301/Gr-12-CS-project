@@ -5,7 +5,7 @@ from Character import Player
 from enemy import Enemy
 from ui import UI
 from random import random
-from weapon import Weapon
+from Weapon import Weapon
 
 class Stuff:
 	def __init__(self):
@@ -16,13 +16,10 @@ class Stuff:
 		self.obstacles_sprites = pygame.sprite.Group()
 		
 		# attack sprites
-		self.current_attack  =None
+		self.current_attack  = None
 		self.attack_sprites = pygame.sprite.Group()
 		self.attackable_sprites = pygame.sprite.Group()
 
-		# Weapon 
-
-		
 		self.create_map()
 
 		self.ui = UI()
@@ -32,12 +29,11 @@ class Stuff:
 		self.empty_heart = pygame.transform.scale(pygame.image.load('graphics/empty_heart.png').convert_alpha(), (30,30))
 
 	def create_map(self):
-		world_map = [['x' if random() < 0.02 else '' for _ in range(300)] for _ in range(300)]
-		world_map[25][25] = 'p'
-		world_map[20][20] = 'y'
+		self.world_map = [['x' if random() < 0.02 else '' for _ in range(300)] for _ in range(300)]
+		self.world_map[25][25] = 'p'
+		self.world_map[20][20] = 'y'
 
-
-		for row_index, row in enumerate(world_map):
+		for row_index, row in enumerate(self.world_map):
 			for col_index, col in enumerate(row):
 				x = col_index * TILESIZE
 				y = row_index * TILESIZE
@@ -61,6 +57,15 @@ class Stuff:
 					   self.destroy_attack
 					   )
 
+	def clear_map(self):
+		self.visible_sprites.empty()
+		self.obstacles_sprites.empty()
+		self.attack_sprites.empty()
+		self.attackable_sprites.empty()
+		self.player = None
+		self.current_attack = None
+		self.world_map = None
+
 	def create_attack(self):
 		self.current_attack = Weapon(self.player, [self.visible_sprites, self.attack_sprites])
 
@@ -68,7 +73,6 @@ class Stuff:
 		if self.current_attack:
 			self.current_attack.kill()
 		self.current_attack = None
-
 
 	def draw_heart(self):
 		hp = self.player.get_heart()[0]
@@ -102,6 +106,9 @@ class Stuff:
 		self.draw_heart()
 		self.ui.display(self.player)
 	
+	def get_player(self):
+		return self.player
+
 class YSortCameraGroup(pygame.sprite.Group):
 	def __init__(self):
 		super().__init__()
