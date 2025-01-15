@@ -31,7 +31,8 @@ class Stuff:
 		self.player = Player((2000, 1400),[self.visible_sprites], 
 					   self.obstacles_sprites, 
 					   self.create_attack,
-					   self.destroy_attack
+					   self.destroy_attack,
+					   self.create_magic
 					   )
 		
 		self.create_map()
@@ -87,7 +88,7 @@ class Stuff:
 			self.player.heart -= amount
 			self.player.vulnerable = False
 			self.player.hurt_time = pygame.time.get_ticks()
-			print(self.player.vulnerable)
+			# print(self.player.vulnerable)
 
 
 	def spawn_enemy(self):
