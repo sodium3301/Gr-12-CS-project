@@ -1,8 +1,8 @@
 import pygame
 import random
 from settings import *
-from entities import Entity
-from Character import Player
+from entity import Entity
+from player import Player
 
 class Enemy(Entity):
     def __init__(self, monster_name,pos,groups, obstacle_sprites):
