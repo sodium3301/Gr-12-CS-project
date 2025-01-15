@@ -1,12 +1,12 @@
 import pygame
 
 from settings import *
-from tiles import Tile
-from Character import Player
+from player import Player
 from enemy import Enemy
-from ui import UI
+from ui import *
 import random
 from weapon import Weapon
+from map import *
 
 class Stuff:
 	def __init__(self):
@@ -25,7 +25,13 @@ class Stuff:
 		# Weapon 
 
 		self.last_spawn_time = pygame.time.get_ticks()
-		self.enemy_spawn_delay = 3000  
+		self.enemy_spawn_delay = 3000
+
+		self.player = Player([self.visible_sprites], 
+					   self.obstacles_sprites, 
+					   self.create_attack,
+					   self.destroy_attack
+					   )
 		
 		self.create_map()
 
@@ -36,34 +42,10 @@ class Stuff:
 		self.empty_heart = pygame.transform.scale(pygame.image.load('graphics/empty_heart.png').convert_alpha(), (30,30))
 
 	def create_map(self):
-		world_map = [['x' if random.random() < 0.02 else '' for _ in range(300)] for _ in range(300)]
-		world_map[25][25] = 'p'
-		world_map[20][20] = 'y'
+		self.map = Map(self, self.player)
+		self.plot = self.map.get_plot()
 
-
-		for row_index, row in enumerate(world_map):
-			for col_index, col in enumerate(row):
-				x = col_index * TILESIZE
-				y = row_index * TILESIZE
-				if col == 'x': 
-					Tile((x,y), [self.visible_sprites,self.obstacles_sprites])
-					pass
-				if col == 'p':
-					# self.player = Player((x,y), [self.visible_sprites], self.obstacles_sprites, self.create_attack)
-					pass
-
-				if col == 'y':
-					Enemy(
-						'monster',
-		   				(x,y),
-						[self.visible_sprites, self.attackable_sprites], 
-						self.obstacles_sprites)
-		self.player = Player((2000,1430), 
-					   [self.visible_sprites], 
-					   self.obstacles_sprites, 
-					   self.create_attack,
-					   self.destroy_attack
-					   )
+		self.map.draw_map(self.visible_sprites, self.obstacles_sprites)
 
 	def clear_map(self):
 		self.visible_sprites.empty()
@@ -152,25 +134,5 @@ class Stuff:
 		self.visible_sprites.enemy_update(self.player)
 		self.draw_heart()
 		self.ui.display(self.player)
+		self.map.update()
 	
-class YSortCameraGroup(pygame.sprite.Group):
-	def __init__(self):
-		super().__init__()
-		self.display_surface = pygame.display.get_surface()
-		self.half_width = self.display_surface.get_size()[0] // 2
-		self.half_height = self.display_surface.get_size()[1] // 2
-		self.offset = pygame.math.Vector2()
-		  
-	def custom_draw(self,player):
-		self.offset.x = player.rect.centerx - self.half_width
-		self.offset.y = player.rect.centery - self.half_height
-
-		for sprite in sorted(self.sprites(),key = lambda sprite:sprite.rect.centery):
-			offset_pos = sprite.rect.topleft - self.offset
-			self.display_surface.blit(sprite.image,offset_pos)
-	
-	def enemy_update(self, player):
-		enemy_sprite = [sprite for sprite in self.sprites() if hasattr(sprite, 'sprite_type') and sprite.sprite_type == 'enemy']
-		for enemy in enemy_sprite:
-			enemy.enemy_update(player)
-

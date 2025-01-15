@@ -1,8 +1,8 @@
 import pygame
 import random
 from settings import *
-from entities import Entity
-from Character import Player
+from entity import Entity
+from player import Player
 
 class Enemy(Entity):
     def __init__(self, monster_name,pos,groups, obstacle_sprites):
@@ -73,7 +73,7 @@ class Enemy(Entity):
 
         if distance <= self.attack_radius:
             self.status = 'attack'
-            print('attack')
+            # print('attack')
         elif distance <= self.agro_radius:
             self.status = 'move'
             

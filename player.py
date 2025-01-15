@@ -1,10 +1,8 @@
 import pygame
 from os import walk
 from settings import *
-from entities import Entity
+from entity import Entity
 # from support import import_folder
-
-
 
 class Player(Entity):
     '''
@@ -12,10 +10,10 @@ class Player(Entity):
 
     Methods:
     '''
-    def __init__(self, pos, groups, obstacle_spirtes, create_attack, destroy_attack):
+    def __init__(self, groups, obstacle_spirtes, create_attack, destroy_attack):
         super().__init__(groups)
         self.image = pygame.image.load('graphics/test/player.png').convert_alpha()
-        self.rect = self.image.get_rect(topleft = pos)
+        self.rect = self.image.get_rect(topleft = (MIDPOINT * TILESIZE, MIDPOINT * TILESIZE))
         self.hitbox = self.rect.inflate(-10, -10)
         
         self.import_player_assets()
@@ -104,7 +102,6 @@ class Player(Entity):
         if keys[pygame.K_LCTRL] and not self.attacking:
             self.attacking = True            
             self.attack_time = pygame.time.get_ticks()
-            print('magic')
 
     def cooldown(self):
         '''
@@ -131,9 +128,15 @@ class Player(Entity):
 
     def get_direction(self):
         '''
-        Returns self.direction
+        Returns self.direction.
         '''
         return self.direction
+
+    def get_position(self):
+        '''
+        Returns self.rect.
+        '''
+        return self.rect
 
     def get_heart(self):
         '''
@@ -159,6 +162,8 @@ class Player(Entity):
             if 'attack' in self.status:
                 self.status.replace("_attack",'')
         
+        # return self.status
+
     def update(self):
         self.input()
         self.cooldown()
