@@ -37,3 +37,7 @@ monster_data = {
 weapon_data = {
     'sword' : {'cooldown': 100, 'damage': 15, 'graphics': '/graphics/weapons/sword/full.png'}
 }
+
+magic_data = {
+    'flame' : {'strength': 5, 'cost': 20, 'graphics': '/graphics/weapons/axe/full.png'},
+    'heal' : {'strength': 30, 'cost': 10, 'graphics': '/graphics/weapons/axe/full.png'}}

@@ -4,15 +4,19 @@ from settings import *
 from entities import Entity
 # from support import import_folder
 
+def import_folder(path):
+	surface_list = []
 
+	for _,__,img_files in walk(path):
+		for image in img_files:
+			full_path = path + '/' + image
+			image_surf = pygame.image.load(full_path).convert_alpha()
+			surface_list.append(image_surf)
+
+	return surface_list
 
 class Player(Entity):
-    '''
-    Player class that controls player's status and activities.
-
-    Methods:
-    '''
-    def __init__(self, pos, groups, obstacle_spirtes, create_attack, destroy_attack):
+    def __init__(self, pos, groups, obstacle_spirtes, create_attack, destroy_attack, create_magic):
         super().__init__(groups)
         self.image = pygame.image.load('graphics/test/player.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = pos)
@@ -25,18 +29,24 @@ class Player(Entity):
 
         # movement
         self.direction = pygame.math.Vector2()
-
-        # collision
-        self.obstacle_sprites = obstacle_spirtes
-
-        # weapon
         self.attacking = False
         self.attack_cool = 400
         self.attack_time = None
+        self.obstacle_sprites = obstacle_spirtes
+
+        # weapon
         self.create_attack = create_attack
         self.destroy_attack = destroy_attack
         self.weapon_index = 0
         self.weapon = list(weapon_data.keys())[self.weapon_index]
+
+        # magic
+        self.create_magic = create_magic
+        self.magic_index = 0
+        self.magic = list(magic_data.keys())[self.magic_index]
+        self.can_switch_magic = True
+        self.magic_switch_time = None
+        #self.switch_duration_cooldown = 200
 
         # stats
         self.stats = {'heart':6,'energy':60,'attack':10,'magic':4,'speed':5}
@@ -45,24 +55,7 @@ class Player(Entity):
         self.speed = self.stats['speed']
         self.exp = 0
     
-    def import_folder(path):
-        '''
-        Helper method for import_player_asset(self)
-        '''
-        surface_list = []
-
-        for _,__,img_files in walk(path):
-            for image in img_files:
-                full_path = path + '/' + image
-                image_surf = pygame.image.load(full_path).convert_alpha()
-                surface_list.append(image_surf)
-
-        return surface_list
-
     def import_player_assets(self):
-        '''
-        Loads the full path into self.animations.
-        '''
         character_path = 'graphics/player/'
         self.animations = {'up': [],'down': [],'left': [],'right': [],
 			'right_idle':[],'left_idle':[],'up_idle':[],'down_idle':[],
@@ -70,12 +63,9 @@ class Player(Entity):
 
         for animation in self.animations.keys():
             full_path = character_path + animation
-            self.animations[animation] = Player.import_folder(full_path)
+            self.animations[animation] = import_folder(full_path)
 
     def input(self):
-        '''
-        Detects input; controls movements and attacks
-        '''
         keys = pygame.key.get_pressed()
         
         if keys[pygame.K_UP] or keys[pygame.K_w]:
@@ -101,25 +91,38 @@ class Player(Entity):
             self.attack_time = pygame.time.get_ticks()
             self.destroy_attack()
             self.create_attack()
+
         if keys[pygame.K_LCTRL] and not self.attacking:
             self.attacking = True            
             self.attack_time = pygame.time.get_ticks()
-            print('magic')
+            style = list(magic_data.keys())[self.magic_index]
+            strength = list(magic_data.values())[self.magic_index]['strength'] + self.stats['magic']
+            cost = list(magic_data.values())[self.magic_index]['cost']
+            self.create_magic(style, strength, cost)
+
+        if keys[pygame.K_e] and self.can_switch_magic:
+            self.can_switch_magic = False
+            self.magic_switch_time = pygame.time.get_ticks()
+            
+            if self.magic_index < len(list(magic_data.keys())) - 1:
+                self.magic_index += 1
+            else:
+                self.magic_index = 0
+
+            self.magic = list(magic_data.keys())[self.magic_index]        
 
     def cooldown(self):
-        '''
-        Resets attacking and destroys attack after the cooldown time
-        '''
         current_time = pygame.time.get_ticks()
         if self.attacking:
             if current_time - self.attack_time >= self.attack_cool:
                 self.attacking = False
                 self.destroy_attack()
+        
+        if not self.can_switch_magic:
+            if current_time - self.magic_switch_time >= self.switch_duration_cooldown:
+                self.can_switch_magic = True
     
     def animate(self):
-        '''
-        Animates the main character by lopping over images in self.animation
-        '''
         animation = self.animations[self.status]
 
         self.frame_index += self.animation_speed
@@ -130,21 +133,12 @@ class Player(Entity):
         self.rect = self.image.get_rect(center = self.hitbox.center)
 
     def get_direction(self):
-        '''
-        Returns self.direction
-        '''
         return self.direction
 
     def get_heart(self):
-        '''
-        Return current hp and maximum hp
-        '''
         return [self.heart, self.stats['heart']]
 
     def get_status(self):
-        '''
-        Manipulate self.status, the key for self.animation in animate().
-        '''
         if self.direction.x == 0 and self.direction.y == 0:
             if not 'idle' in self.status and not 'attack' in self.status:
                 self.status += "_idle"
