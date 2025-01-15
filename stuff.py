@@ -85,7 +85,6 @@ class Stuff:
 			self.player.hurt_time = pygame.time.get_ticks()
 			print(self.player.vulnerable)
 
-
 	def spawn_enemy(self):
 		"""
 		Spawns an enemy at a random position around the player.
@@ -93,6 +92,7 @@ class Stuff:
 		enemy_pos = self.get_random_spawn_position()
 
 		# Create an enemy at the computed position
+		
 		Enemy(
 			'monster',
 			enemy_pos,
@@ -100,6 +100,7 @@ class Stuff:
 			self.obstacles_sprites,
 			self.damage_player
 		)
+
 	def destroy_attack(self):
 		if self.current_attack:
 			self.current_attack.kill()
@@ -145,10 +146,10 @@ class Stuff:
 	def run(self):
 		current_time = pygame.time.get_ticks()
 		num_enemies = random.randint(3, 5)
-		# if current_time - self.last_spawn_time >= self.enemy_spawn_delay:
-		# 	for i in range(random.randint(3, 5)):
-		# 		self.spawn_enemy()
-		# 	self.last_spawn_time = current_time 
+		if current_time - self.last_spawn_time >= self.enemy_spawn_delay:
+			for i in range(random.randint(3, 5)):
+				self.spawn_enemy()
+			self.last_spawn_time = current_time 
 
 		self.visible_sprites.custom_draw(self.player)
 		self.visible_sprites.update()

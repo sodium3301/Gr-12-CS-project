@@ -115,14 +115,12 @@ class Enemy(Entity):
             self.direction = self.get_player_distance_direction(player)[1]
         else:
             self.direction = pygame.math.Vector2()
-
+    
     def update(self):
         self.hit_reaction()
         self.move(self.speed)
         self.check_death()
         self.cooldown()
-
-    
 
     def enemy_update(self, player):
         self.get_status(player)

@@ -22,7 +22,6 @@ class Player(Entity):
         self.animation_speed = 0.15
 
         # movement
-        self.direction = pygame.math.Vector2()
         self.attacking = False
         self.attack_cool = 400
         self.attack_time = None
@@ -83,22 +82,6 @@ class Player(Entity):
     
     def get_y_pos(self):
         return self.rect.centery
-    
-    def offset_position(self, direction):
-        if direction == 'up':
-            self.hitbox.y += TILESIZE
-            self.rect.center = self.hitbox.center
-        elif direction == 'down':
-            self.hitbox.y -= TILESIZE
-            self.rect.center = self.hitbox.center
-
-        if direction == 'left':
-            self.hitbox.x += TILESIZE
-            self.rect.center = self.hitbox.center
-            print(self.rect.centerx)
-        elif direction == 'right':
-            self.hitbox.x -= TILESIZE
-            self.rect.center = self.hitbox.center
 
     def input(self):
         keys = pygame.key.get_pressed()

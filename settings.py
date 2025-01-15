@@ -2,8 +2,8 @@ WIDTH = 1280
 HEIGHT = 768
 FPS = 60
 TILESIZE = 64
-DIMENSION = 81
-MIDPOINT = 40
+DIMENSION = 61
+MIDPOINT = 30
 
 weapon_data = {
 	'sword': {'cooldown': 100, 'damage': 15,'graphic':'../graphics/melee sprites/up.png'},
