@@ -7,6 +7,7 @@ from ui import *
 import random
 from weapon import Weapon
 from map import *
+from particles import AnimationPlayer
 
 class Stuff:
 	def __init__(self):
@@ -36,7 +37,10 @@ class Stuff:
 		self.create_map()
 
 		self.ui = UI(self.player)
-		
+
+		# particles
+		self.animation_player = AnimationPlayer()
+
 	def create_map(self):
 		self.map = Map(self, self.player, self.visible_sprites, self.obstacles_sprites)
 		self.plot = self.map.get_plot()
@@ -55,7 +59,12 @@ class Stuff:
 	def create_attack(self):
 		self.current_attack = Weapon(self.player, [self.visible_sprites, self.attack_sprites])
 
-	def get_random_spawn_position(self, min_distance=200, max_distance=800):
+	def create_magic(self,style,strength,cost):
+		print(style)
+		print(strength)
+		print(cost)
+
+	def get_random_spawn_position(self, min_distance=200, max_distance=500):
 		"""Generate a random position around the player at a given distance range."""
 		angle = random.uniform(0, 360)  # Random angle in degrees
 		distance = random.randint(min_distance, max_distance)  # Random distance
@@ -74,6 +83,7 @@ class Stuff:
 			self.player.heart -= amount
 			self.player.vulnerable = False
 			self.player.hurt_time = pygame.time.get_ticks()
+			print(self.player.vulnerable)
 
 
 	def spawn_enemy(self):

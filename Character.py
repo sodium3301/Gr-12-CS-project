@@ -21,19 +21,26 @@ class Player(Entity):
         self.frame_index = 0
         self.animation_speed = 0.15
 
-        self.logical_position = [MIDPOINT, MIDPOINT]  
-
-        # collision
-        self.obstacle_sprites = obstacle_spirtes
-
-        # weapon
+        # movement
+        self.direction = pygame.math.Vector2()
         self.attacking = False
         self.attack_cool = 400
         self.attack_time = None
+        self.obstacle_sprites = obstacle_spirtes
+
+        # weapon
         self.create_attack = create_attack
         self.destroy_attack = destroy_attack
         self.weapon_index = 0
         self.weapon = list(weapon_data.keys())[self.weapon_index]
+
+        # magic
+        self.create_magic = create_magic
+        self.magic_index = 0
+        self.magic = list(magic_data.keys())[self.magic_index]
+        self.can_switch_magic = True
+        self.magic_switch_time = None
+        #self.switch_duration_cooldown = 200
 
         # stats
         self.stats = {'heart':20,'energy':60,'attack':10,'magic':4,'speed':5}
@@ -44,7 +51,7 @@ class Player(Entity):
     
         self.vulnerable = True
         self.hurt_time = None
-        self.invulnerability_dur = 500
+        self.invulnerability_dur = 100
 
 
     def import_folder(path):
@@ -62,9 +69,6 @@ class Player(Entity):
         return surface_list
 
     def import_player_assets(self):
-        '''
-        Loads the full path into self.animations.
-        '''
         character_path = 'graphics/player/'
         self.animations = {'up': [],'down': [],'left': [],'right': [],
 			'right_idle':[],'left_idle':[],'up_idle':[],'down_idle':[],
@@ -97,9 +101,6 @@ class Player(Entity):
             self.rect.center = self.hitbox.center
 
     def input(self):
-        '''
-        Detects input; controls movements and attacks
-        '''
         keys = pygame.key.get_pressed()
         
         if keys[pygame.K_UP] or keys[pygame.K_w]:
@@ -125,15 +126,27 @@ class Player(Entity):
             self.attack_time = pygame.time.get_ticks()
             self.destroy_attack()
             self.create_attack()
+
         if keys[pygame.K_LCTRL] and not self.attacking:
             self.attacking = True            
             self.attack_time = pygame.time.get_ticks()
-            print('magic')
+            style = list(magic_data.keys())[self.magic_index]
+            strength = list(magic_data.values())[self.magic_index]['strength'] + self.stats['magic']
+            cost = list(magic_data.values())[self.magic_index]['cost']
+            self.create_magic(style, strength, cost)
+
+        if keys[pygame.K_e] and self.can_switch_magic:
+            self.can_switch_magic = False
+            self.magic_switch_time = pygame.time.get_ticks()
+            
+            if self.magic_index < len(list(magic_data.keys())) - 1:
+                self.magic_index += 1
+            else:
+                self.magic_index = 0
+
+            self.magic = list(magic_data.keys())[self.magic_index]        
 
     def cooldown(self):
-        '''
-        Resets attacking and destroys attack after the cooldown time
-        '''
         current_time = pygame.time.get_ticks()
         if self.attacking:
             if current_time - self.attack_time >= self.attack_cool:
@@ -146,9 +159,6 @@ class Player(Entity):
                 print(self.vulnerable)
     
     def animate(self):
-        '''
-        Animates the main character by lopping over images in self.animation
-        '''
         animation = self.animations[self.status]
 
         self.frame_index += self.animation_speed
@@ -159,21 +169,12 @@ class Player(Entity):
         self.rect = self.image.get_rect(center = self.hitbox.center)
 
     def get_direction(self):
-        '''
-        Returns self.direction
-        '''
         return self.direction
 
     def get_heart(self):
-        '''
-        Return current hp and maximum hp
-        '''
         return [self.heart, self.stats['heart']]
 
     def get_status(self):
-        '''
-        Manipulate self.status, the key for self.animation in animate().
-        '''
         if self.direction.x == 0 and self.direction.y == 0:
             if not 'idle' in self.status and not 'attack' in self.status:
                 self.status += "_idle"
