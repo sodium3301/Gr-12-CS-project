@@ -7,6 +7,7 @@ from ui import *
 import random
 from weapon import Weapon
 from map import *
+from particles import AnimationPlayer
 
 class Stuff:
 	def __init__(self):
@@ -37,6 +38,9 @@ class Stuff:
 
 		self.ui = UI()
 
+		# particles
+		self.animation_player = AnimationPlayer()
+
 		self.full_heart = pygame.transform.scale(pygame.image.load('graphics/full_heart.png').convert_alpha(), (30,30))
 		self.half_heart = pygame.transform.scale(pygame.image.load('graphics/half_heart.png').convert_alpha(), (30,30))
 		self.empty_heart = pygame.transform.scale(pygame.image.load('graphics/empty_heart.png').convert_alpha(), (30,30))
@@ -59,7 +63,12 @@ class Stuff:
 	def create_attack(self):
 		self.current_attack = Weapon(self.player, [self.visible_sprites, self.attack_sprites])
 
-	def get_random_spawn_position(self, min_distance=200, max_distance=800):
+	def create_magic(self,style,strength,cost):
+		print(style)
+		print(strength)
+		print(cost)
+
+	def get_random_spawn_position(self, min_distance=200, max_distance=500):
 		"""Generate a random position around the player at a given distance range."""
 		angle = random.uniform(0, 360)  # Random angle in degrees
 		distance = random.randint(min_distance, max_distance)  # Random distance
