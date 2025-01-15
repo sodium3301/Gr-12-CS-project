@@ -47,7 +47,7 @@ class Player(Entity):
     
         self.vulnerable = True
         self.hurt_time = None
-        self.invulnerability_dur = 500
+        self.invulnerability_dur = 100
 
 
     def import_folder(path):

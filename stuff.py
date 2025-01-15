@@ -78,6 +78,7 @@ class Stuff:
 			self.player.heart -= amount
 			self.player.vulnerable = False
 			self.player.hurt_time = pygame.time.get_ticks()
+			print(self.player.vulnerable)
 
 
 	def spawn_enemy(self):
