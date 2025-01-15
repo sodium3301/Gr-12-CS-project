@@ -42,6 +42,7 @@ class Main:
         pygame.display.update()
 
     def death_screen(self):
+        self.game_active = False
         self.screen.fill((0, 0, 0))
         text = self.font.render("You're dead. Press R to restart, ESC to quit", True, (255, 255, 255))
         text_rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2))
@@ -78,8 +79,11 @@ class Main:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.pulsing = not self.pulsing
-                    if event.key == pygame.K_k or self.stuff.get_player().get_heart()[0] <= 0:
+                    if event.key == pygame.K_k:
                         self.death_screen()
+            
+            if self.stuff.get_player().get_heart()[0] <= 0:
+                self.death_screen()
 
             if self.pulsing:
                 self.pulse_screen()

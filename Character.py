@@ -139,7 +139,7 @@ class Player(Entity):
         if not self.vulnerable:
             if current_time - self.hurt_time >= self.invulnerability_dur:
                 self.vulnerable = True
-                print(self.vulnerable)
+                # print(self.vulnerable)
     
     def animate(self):
         animation = self.animations[self.status]
