@@ -3,14 +3,24 @@ from settings import *
 from stuff import Stuff
 pygame.init()
 class Main:
+    """
+    Initializes game window, handles the game while True loop, and controls the status of the game such as pulsing.
+
+    Attributes:
+        screen (pygame.Surface): 
+        clock (pygame.time.Clock): Manages the frame rate of the game loop.
+        font (pygame.font.Font): Font object used for rendering text on the screen.
+        stuff (Stuff): A Stuff object that handles game-specific logics.
+        game_active (bool): Tracks whether the main game is currently active.
+        pulsing (bool): Tracks whether the pulsing state is active (pausing the game with a visual overlay).
+    """
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         self.clock = pygame.time.Clock()
-        self.stuff = Stuff()
-        self.game_active = False
-        self.pulsing = False
         self.font = pygame.font.Font(None, 50)
+        self.stuff = Stuff()
+        self.pulsing = False
     
     def start_screen(self):
         self.screen.fill((0, 0, 0))
@@ -26,7 +36,6 @@ class Main:
                     sys.exit()
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
                     waiting = False
-                    self.game_active = True
                     self.stuff.create_map()
 
     def pulse_screen(self):
@@ -41,7 +50,6 @@ class Main:
         pygame.display.update()
 
     def death_screen(self):
-        self.game_active = False
         self.screen.fill((0, 0, 0))
         text = self.font.render("You're dead. Press R to restart, ESC to quit", True, (255, 255, 255))
         text_rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2))
@@ -58,7 +66,6 @@ class Main:
                     if event.key == pygame.K_r:
                         self.stuff.reset()
                         waiting = False
-                        self.game_active = True
                         self.stuff.create_map()
                     elif event.key == pygame.K_ESCAPE:
                         self.stuff.reset()
@@ -66,9 +73,7 @@ class Main:
                         self.start_screen()
 
     def run(self):
-        
-        if not self.game_active:
-            self.start_screen()
+        self.start_screen()
  
         while True:
             for event in pygame.event.get():

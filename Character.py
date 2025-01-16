@@ -2,26 +2,37 @@ import pygame
 from os import walk
 from settings import *
 from entity import Entity
+from support import import_folder
 
 class Player(Entity):
     '''
-    Player class that controls player's status and activities.
-
-    Player class that controls the player's status and activities.
+    Controls the player's image (animation and frames), 
+    status (direction + idle or attacking) and activities such as attack and cooldown. 
 
     Attributes:
-        groups (str): The sprite groups the player belongs to.
-        obstacle_sprites (Group): The sprite group representing obstacles.
-        create_attack (callable): Function to create an attack instance.
-        destroy_attack (callable): Function to destroy an attack instance.
-        animations (dict): Dictionary containing animation frames for different player states.
-        stats (dict): Dictionary holding player's stats like health, energy, attack, magic, and speed.
-        heart (int): Current health of the player.
-        energy (int): Current energy level of the player.
-        speed (int): Movement speed of the player.
-        exp (int): Experience points of the player.
-        weapon (str): Currently equipped weapon.
-        magic (str): Currently equipped magic ability.
+        groups (list[str]): The sprite groups the player belongs to.
+        image (Surface): Stores the image of the player.
+        rect (Rect): The rect of the player.
+        hitbox (Rect): The hitbox of the player shrinks compared to rect.
+        status (str): The direction, idleness, and whether the player is attacking.
+        frame_index (int): The index used to access frames of animation.
+        animation_speed (float): The speed which frame_index loops.
+        stats (dict[int]): Dictionary holding player's default health, energy, attack, magic, and speed.
+        heart (int): Stores current number of hearts of the player.
+        energy (int): Stores current energy of the player.
+        speed (int): Stores current speed of the player.
+
+    Methods:
+        import_player_assets(): Loads the dictionary with frames of surfaces found in the path
+        get_x_pos(): Returns self.rect.centerx
+        get_y_pos(): Returns self.rect.centery
+        input(): Produces basic status and direction (Vector2) by detecting keys pressed
+        animate(): Updates self.image with frames of surfaces from self.animatons
+        get_direction(): Returns current direction.
+        get_heart(): Returns current and max hp.
+        get_status(): Produces the full status.
+        update(): Updates the position, status, and image of the player.
+
     '''
     def __init__(self, groups, obstacle_spirtes, create_attack, destroy_attack):
         super().__init__(groups)
@@ -29,10 +40,14 @@ class Player(Entity):
         self.rect = self.image.get_rect(topleft = (MIDPOINT * TILESIZE, MIDPOINT * TILESIZE))
         self.hitbox = self.rect.inflate(-10, -10)
         
-        self.import_player_assets()
+        # animation
+        self.animations = {'up': [],'down': [],'left': [],'right': [],
+			'right_idle':[],'left_idle':[],'up_idle':[],'down_idle':[],
+			'right_attack':[],'left_attack':[],'up_attack':[],'down_attack':[]}
         self.status = 'down'
         self.frame_index = 0
         self.animation_speed = 0.15
+        self.import_player_assets()
 
         # movement
         self.attacking = False
@@ -68,37 +83,33 @@ class Player(Entity):
         self.score = 0
 
 
-    def import_folder(path):
-        '''
-        Helper method for import_player_asset(self)
-        '''
-        surface_list = []
-
-        for _,__,img_files in walk(path):
-            for image in img_files:
-                full_path = path + '/' + image
-                image_surf = pygame.image.load(full_path).convert_alpha()
-                surface_list.append(image_surf)
-
-        return surface_list
 
     def import_player_assets(self):
+        """
+        Produce the full path to the set of frames of a status and loads them as surfaces into the dictionary self.animations.
+        """
         character_path = 'graphics/player/'
-        self.animations = {'up': [],'down': [],'left': [],'right': [],
-			'right_idle':[],'left_idle':[],'up_idle':[],'down_idle':[],
-			'right_attack':[],'left_attack':[],'up_attack':[],'down_attack':[]}
 
         for animation in self.animations.keys():
             full_path = character_path + animation
-            self.animations[animation] = Player.import_folder(full_path)
+            self.animations[animation] = import_folder(full_path)
     
     def get_x_pos(self):
+        """
+        get_x_pos(): Returns the x position of the center of the player rect.
+        """
         return self.rect.centerx
     
     def get_y_pos(self):
+        """
+        get_y_pos(): Returns the y position of the center of the player rect.
+        """
         return self.rect.centery
 
     def input(self):
+        """
+        input(): Produce base of self.status and direction (Vector2) by detecting keys like WASD.
+        """
         keys = pygame.key.get_pressed()
         
         if keys[pygame.K_UP] or keys[pygame.K_w]:
@@ -145,6 +156,7 @@ class Player(Entity):
             self.magic = list(magic_data.keys())[self.magic_index]        
 
     def cooldown(self):
+
         current_time = pygame.time.get_ticks()
         if self.attacking:
             if current_time - self.attack_time >= self.attack_cool:
@@ -157,6 +169,9 @@ class Player(Entity):
                 # print(self.vulnerable)
     
     def animate(self):
+        """
+        Updates self.image with frames of surfaces from self.animatons
+        """
         animation = self.animations[self.status]
 
         self.frame_index += self.animation_speed
@@ -167,12 +182,21 @@ class Player(Entity):
         self.rect = self.image.get_rect(center = self.hitbox.center)
 
     def get_direction(self):
+        """
+        Returns current direction as a Vector2.
+        """
         return self.direction
 
     def get_heart(self):
+        """
+        Returns current hp and max hp as a tuple.
+        """
         return [self.heart, self.stats['heart']]
 
     def get_status(self):
+        """
+        Adds _idle or _attack to self.status that gained its base from animate() to compose the key to access self.animations.
+        """
         if self.direction.x == 0 and self.direction.y == 0:
             if not 'idle' in self.status and not 'attack' in self.status:
                 self.status += "_idle"
