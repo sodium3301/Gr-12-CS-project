@@ -1,6 +1,10 @@
 import pygame
 from settings import *
 
+
+"""
+The UI class handles the game's user interface, including health display and score rendering.
+"""
 class UI:
 	def __init__(self, player):
 		self.display_surface = pygame.display.get_surface()
@@ -12,6 +16,10 @@ class UI:
 		self.font = pygame.font.Font(None, 50)
 		# 3:12:08
 
+
+	"""
+	Displays the player's score in the bottom-right corner of the screen.
+	"""
 	def show_score(self, score):
 		text_surf = self.font.render('score: ' + str(int(score)), False, text_colour)
 		x = self.display_surface.get_size()[0]-20

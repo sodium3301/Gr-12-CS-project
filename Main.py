@@ -14,6 +14,10 @@ class Main:
         game_active (bool): Tracks whether the main game is currently active.
         pulsing (bool): Tracks whether the pulsing state is active (pausing the game with a visual overlay).
     """
+
+    """
+    Initializes the game window, clock, font, and game logic handler 'Stuff'.
+    """
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -22,6 +26,10 @@ class Main:
         self.stuff = Stuff()
         self.pulsing = False
     
+
+    """
+    Displays the start screen and waits for the user to press 'enter' to begin the game.
+    """
     def start_screen(self):
         self.screen.fill((0, 0, 0))
         text = self.font.render('Press ENTER to Start', True, (255, 255, 255))
@@ -38,6 +46,9 @@ class Main:
                     waiting = False
                     self.stuff.create_map()
 
+    """
+    Displays a semi-transparent overlay with the text 'Pulsing' to indicate a paused state.
+    """
     def pulse_screen(self):
         surface = pygame.Surface((WIDTH, HEIGHT))
         surface.fill((0, 0, 0))
@@ -49,6 +60,9 @@ class Main:
         self.screen.blit(text, text_rect)
         pygame.display.update()
 
+    """
+    Displays the death screen with options to restart or quit the game.
+    """
     def death_screen(self):
         self.screen.fill((0, 0, 0))
         text = self.font.render("You're dead. Press R to restart, ESC to quit", True, (255, 255, 255))
