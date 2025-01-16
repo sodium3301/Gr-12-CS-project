@@ -16,7 +16,7 @@ class Enemy(Entity):
         # graphics setup
         self.import_graphics(monster_name)
 
-        self.image = pygame.image.load('graphics/test/player.png').convert_alpha()
+        self.image = pygame.image.load('graphics/enemy.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = pos)
 
         # enemy movment

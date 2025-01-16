@@ -1,7 +1,7 @@
 import pygame, sys
 from settings import *
 from stuff import Stuff
-pygame.init()
+
 class Main:
     """
     Initializes game window, handles the game while True loop, and controls the status of the game such as pulsing.
