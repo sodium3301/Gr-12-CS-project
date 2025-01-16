@@ -42,9 +42,7 @@ class Stuff:
 		self.animation_player = AnimationPlayer()
 
 	def create_map(self):
-		self.map = Map(self, self.player, self.visible_sprites, self.obstacles_sprites)
-		self.plot = self.map.get_plot()
-
+		self.map = Map(self.player, self.visible_sprites, self.obstacles_sprites)
 		self.map.draw_map()
 
 	def reset(self):

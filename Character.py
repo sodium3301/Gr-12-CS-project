@@ -2,13 +2,26 @@ import pygame
 from os import walk
 from settings import *
 from entity import Entity
-# from support import import_folder
 
 class Player(Entity):
     '''
     Player class that controls player's status and activities.
 
-    Methods:
+    Player class that controls the player's status and activities.
+
+    Attributes:
+        groups (str): The sprite groups the player belongs to.
+        obstacle_sprites (Group): The sprite group representing obstacles.
+        create_attack (callable): Function to create an attack instance.
+        destroy_attack (callable): Function to destroy an attack instance.
+        animations (dict): Dictionary containing animation frames for different player states.
+        stats (dict): Dictionary holding player's stats like health, energy, attack, magic, and speed.
+        heart (int): Current health of the player.
+        energy (int): Current energy level of the player.
+        speed (int): Movement speed of the player.
+        exp (int): Experience points of the player.
+        weapon (str): Currently equipped weapon.
+        magic (str): Currently equipped magic ability.
     '''
     def __init__(self, groups, obstacle_spirtes, create_attack, destroy_attack):
         super().__init__(groups)
