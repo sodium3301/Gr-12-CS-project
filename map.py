@@ -90,31 +90,24 @@ class Map:
             self.plot.pop()
             self.plot.insert(0, [self.create_tile() for _ in range(DIMENSION)])
             self.offset_y -= 1
-            # print('top')
+            print('top')
         # down
         elif self.player.get_y_pos() >= (MIDPOINT + self.offset_y + 1) * TILESIZE:
             self.plot.pop(0)
             self.plot.append([self.create_tile() for _ in range(DIMENSION)])
             self.offset_y += 1
-            # print('bottom')
+            print('bottom')
         # left
         if self.player.get_x_pos() <= (MIDPOINT + self.offset_x) * TILESIZE:
             for row in self.plot:
                 row.pop()
                 row.insert(0, self.create_tile())
             self.offset_x -= 1
-            # print('left')
+            print('left')
         # right
         elif self.player.get_x_pos() >= (MIDPOINT + self.offset_x + 1) * TILESIZE:
             for row in self.plot:
                 row.pop(0)
                 row.append(self.create_tile())
             self.offset_x += 1
-<<<<<<< Updated upstream
-            # print('right')
-
-    def get_plot(self):
-        return self.plot
-=======
             print('right')
->>>>>>> Stashed changes
