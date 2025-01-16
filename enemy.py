@@ -4,8 +4,9 @@ from settings import *
 from entity import Entity
 from Character import Player
 
+
 class Enemy(Entity):
-    def __init__(self, monster_name,pos,groups, obstacle_sprites, damage_player):
+    def __init__(self, monster_name,pos,groups, obstacle_sprites, damage_player, add_score):
         
         #general setup
         super().__init__(groups)
@@ -43,6 +44,9 @@ class Enemy(Entity):
         self.vulnerable = True
         self.hit_time = None
         self. invincibility_dur = 500
+
+        self.add_score = add_score
+  
 
 
     def get_player_distance_direction(self, player):
@@ -101,6 +105,11 @@ class Enemy(Entity):
     def check_death(self):
         if self.health <= 0:
             self.kill()
+            self.add_score(1)
+      
+            
+  
+
 
     def hit_reaction(self):
         if not self.vulnerable:
@@ -121,6 +130,7 @@ class Enemy(Entity):
         self.move(self.speed)
         self.check_death()
         self.cooldown()
+
 
     def enemy_update(self, player):
         self.get_status(player)

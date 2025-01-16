@@ -52,6 +52,8 @@ class Player(Entity):
         self.hurt_time = None
         self.invulnerability_dur = 100
 
+        self.score = 0
+
 
     def import_folder(path):
         '''

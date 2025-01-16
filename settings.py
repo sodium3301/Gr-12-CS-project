@@ -4,6 +4,7 @@ FPS = 60
 TILESIZE = 64
 DIMENSION = 61
 MIDPOINT = 30
+text_colour = '#000000'
 
 weapon_data = {
 	'sword': {'cooldown': 100, 'damage': 15,'graphic':'../graphics/melee sprites/up.png'},

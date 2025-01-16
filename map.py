@@ -68,14 +68,14 @@ class Map:
             self.plot.insert(0, [self.create_tile() for _ in range(DIMENSION)])
             # self.player.offset('up')
             self.offset_y -= 1
-            print('top')
+            # print('top')
         # down
         if self.player.get_y_pos() >= (self.get_midpoint()[1] + 1) * TILESIZE:
             self.plot.pop(0)
             self.plot.append([self.create_tile() for _ in range(DIMENSION)])
             # self.player.offset('down')
             self.offset_y += 1
-            print('bottom')
+            # print('bottom')
         # left
         if self.player.get_x_pos() <= self.get_midpoint()[0] * TILESIZE:
             for row in self.plot:
@@ -83,7 +83,7 @@ class Map:
                 row.insert(0, self.create_tile())
             # self.player.offset('left')
             self.offset_x -= 1
-            print('left')
+            # print('left')
         # right
         if self.player.get_x_pos() >= (self.get_midpoint()[0] + 1) * TILESIZE:
             for row in self.plot:
@@ -91,7 +91,7 @@ class Map:
                 row.append(self.create_tile())
             # self.player.offset('right')
             self.offset_x += 1
-            print('right')
+            # print('right')
 
     def get_plot(self):
         return self.plot

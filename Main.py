@@ -90,6 +90,7 @@ class Main:
             else:
                 self.screen.fill('white')
                 self.stuff.run()
+             
                 pygame.display.update()
 
             self.clock.tick(FPS)

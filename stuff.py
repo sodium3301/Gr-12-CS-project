@@ -16,6 +16,7 @@ class Stuff:
 		# sprite group setup
 		self.visible_sprites = YSortCameraGroup()
 		self.obstacles_sprites = pygame.sprite.Group()
+		self.score = 0
 		
 		# attack sprites
 		self.current_attack  = None
@@ -106,13 +107,19 @@ class Stuff:
 
 		# Create an enemy at the computed position
 		
-		Enemy(
+		self.enemy = Enemy(
 			'monster',
 			enemy_pos,
 			[self.visible_sprites, self.attackable_sprites],
 			self.obstacles_sprites,
-			self.damage_player
+			self.damage_player,
+			self.add_score
 		)
+
+	def add_score(self, amount):
+		self.player.score += amount
+		
+	
 
 	def destroy_attack(self):
 		if self.current_attack:
@@ -171,5 +178,7 @@ class Stuff:
 		self.player_attack()
 
 		self.ui.draw_heart()
+
+		self.ui.display(self.player)
 		self.map.update()
 		self.map.draw_map()
